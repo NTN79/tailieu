@@ -1,15 +1,18 @@
 module.exports = (sequelize, Sequelize) => {
-    const Role = sequelize.define("roles", {
+    const imageProduct = sequelize.define("imageProduct", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      name: {
+      path: {
         type: Sequelize.STRING
+      },
+      productId:{
+          type: Sequelize.INTEGER
       }
     },{
       freezeTableName: true
     });
-    return Role;
+    return imageProduct;
   };

@@ -11,10 +11,18 @@ dbShop.sequelize.sync().then(()=>{
 }).catch((e)=>{
   console.log(e,'db connect fail  ...!')
 });
-dbShop.sequelize.sync({ force: true }).then(() => {
-    console.log("Drop and re-sync db.");
-    initial();
-});
+// dbShop.sequelize.sync({force: true }).then(() => {
+//     console.log("NOT Drop and re-sync db.");
+//     // let initial=()=>{
+//     //   dbShop.role.create({
+//     //     name: "admin"
+//     //   });
+//     //   dbShop.role.create({
+//     //     name: "user"
+//     //   });
+//     // };
+//     // initial();
+// });
 
 // parse application/json
 app.use(bodyParser.urlencoded({ extended: false }));

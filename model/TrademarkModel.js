@@ -1,15 +1,20 @@
 module.exports = (sequelize, Sequelize) => {
-    const Role = sequelize.define("roles", {
+    const Trademark = sequelize.define("trademark", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique:true,
+        allowNull:false
+      },
+       description:{
+          type:Sequelize.STRING
       }
     },{
       freezeTableName: true
     });
-    return Role;
+    return Trademark;
   };

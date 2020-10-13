@@ -19,9 +19,35 @@ databaseShop.Sequelize = Sequelize;
 databaseShop.sequelize = sequelize;
 databaseShop.Users = require('../model/userModel')(sequelize,Sequelize);
 databaseShop.role = require('../model/roleModel')(sequelize,Sequelize);
-// databaseShop.role.belongToMany(databaseShop.Users,{
-//   through:"fk_USER_ROLE",
-//   fo
-// })
+databaseShop.Products= require('../model/productModel')(sequelize,Sequelize);
+databaseShop.Trademark = require('../model/TrademarkModel')(sequelize,Sequelize);
+databaseShop.detailProduct = require('../model/detailProductModel')(sequelize,Sequelize);
+databaseShop.ImageProduct = require('../model/imageProductModel')(sequelize,Sequelize);
 
+databaseShop.Users.belongsTo(databaseShop.role,{
+  foreignKey:"roleId",
+  otherKey:"id"
+});
+databaseShop.ImageProduct.belongsTo(databaseShop.Products,{
+  foreignKey:"productId",
+  otherKey:"id"
+});
+databaseShop.Products.belongsTo(databaseShop.Trademark,{
+  foreignKey:"trademarkId",
+  otherKey:"id"
+});
+databaseShop.detailProduct.belongsTo(databaseShop.Products,{
+  foreignKey:"productId",
+  otherKey:"id"
+});
+databaseShop.Users.belongsToMany(databaseShop.Products,{
+  through:"list-cart",
+  foreignKey:"UserId",
+  otherKey:"ProductId"
+});
+databaseShop.Products.belongsToMany(databaseShop.Users,{
+  through:"list-cart",
+  foreignKey:"ProductId",
+  otherKey:"UserId"
+});
 module.exports = databaseShop;

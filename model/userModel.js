@@ -45,7 +45,7 @@ module.exports = (sequelize,Sequelize)=>{
             allowNull: false,
             length: '50'
         },
-        role:{
+        roleId:{
             type: Sequelize.INTEGER,
             allowNull:false
         },
