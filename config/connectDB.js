@@ -23,7 +23,17 @@ databaseShop.Products= require('../model/productModel')(sequelize,Sequelize);
 databaseShop.Trademark = require('../model/TrademarkModel')(sequelize,Sequelize);
 databaseShop.detailProduct = require('../model/detailProductModel')(sequelize,Sequelize);
 databaseShop.ImageProduct = require('../model/imageProductModel')(sequelize,Sequelize);
-
+const setRole= async()=>{
+  databaseShop.ROLES=[];
+  let roleData = await databaseShop.role.findAll({
+    attributes:['id'],
+  });
+  await roleData.forEach(x => {
+    databaseShop.ROLES.push(JSON.stringify(x.dataValues.id));
+    console.log(x.dataValues.id)
+  });
+}
+setRole();
 databaseShop.Users.belongsTo(databaseShop.role,{
   foreignKey:"roleId",
   otherKey:"id"

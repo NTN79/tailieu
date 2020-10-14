@@ -7,21 +7,30 @@ require('dotenv').config({path:"./.env"});
 //connect db
 const dbShop = require('./config/connectDB');
 dbShop.sequelize.sync().then(()=>{
+  // let roles= await dbShop.role.findOne({
+  //   attributes:['id','name'],
+  //   where:{
+  //       id:2,
+  //       name: 'user'
+  //   }
+  // });
+  // console.log(roles.dataValues);
+  console.log(dbShop.ROLES);
   console.log('db connect...!!');
 }).catch((e)=>{
   console.log(e,'db connect fail  ...!')
 });
 // dbShop.sequelize.sync({force: true }).then(() => {
 //     console.log("NOT Drop and re-sync db.");
-//     // let initial=()=>{
-//     //   dbShop.role.create({
-//     //     name: "admin"
-//     //   });
-//     //   dbShop.role.create({
-//     //     name: "user"
-//     //   });
-//     // };
-//     // initial();
+//     let initial=()=>{
+//       dbShop.role.create({
+//         name: "admin"
+//       });
+//       dbShop.role.create({
+//         name: "user"
+//       });
+//     };
+//     initial();
 // });
 
 // parse application/json
@@ -30,11 +39,11 @@ app.use(bodyParser.json());
 
 
 //router api
-app.use('/api',userRouter);
+//app.use('/api',userRouter);
 
 
 //app listen port
 const port = process.env.PORT || 8080;
 app.listen(port,()=>{
     console.log('app listen port:',port);
-})
+})  
