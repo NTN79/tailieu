@@ -1,11 +1,3 @@
-const {Users,ROLES} = require('../config/connectDB');
+const {ROLES} = require('../config/connectDB');
+const User = require('../Service/user.service');
 
-exports.CheckEmail = async(req,res,next)=>{
-    let user = await Users.findOne({
-        where: {
-            $or:[{
-                email: req.body.email
-            }]
-        }
-    });
-};

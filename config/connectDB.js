@@ -26,11 +26,10 @@ databaseShop.ImageProduct = require('../model/imageProductModel')(sequelize,Sequ
 const setRole= async()=>{
   databaseShop.ROLES=[];
   let roleData = await databaseShop.role.findAll({
-    attributes:['id'],
+    attributes:['name'],
   });
   await roleData.forEach(x => {
-    databaseShop.ROLES.push(JSON.stringify(x.dataValues.id));
-    console.log(x.dataValues.id)
+    databaseShop.ROLES.push(JSON.stringify(x.dataValues.name));
   });
 }
 setRole();
