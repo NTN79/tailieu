@@ -2,6 +2,7 @@ const {Users} = require('../config/connectDB');
 const {Op} = require('sequelize');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+require('dotenv').config({path:'../.env'});
 
 exports.getAllUser= async()=>{
     try {
@@ -34,6 +35,7 @@ exports.createUser= async (req)=>{
 };
 exports.findById= async(id)=>{
     let user = await Users.findOne({
+        attributes:['id','fistName', 'lastName', 'birthday', 'phone', 'gender', 'address', 'email','avatar'],
         where:{
             id:id
         }
@@ -57,6 +59,9 @@ exports.findByUser= async ({email,password})=>{
         return null;
     }
 };
-exports.generateAuthToken = ()=>{
-    console.log('toke')
-}
+exports.generateAuthToken = async (user)=>{
+    let token = await jwt.sign({_id:user.id},process.env.JWT_KEY,{
+        expiresIn:86400
+    });
+    return token;
+};

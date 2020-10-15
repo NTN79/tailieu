@@ -1,5 +1,6 @@
 const User = require('../Service/user.service');
 
+
 exports.getAll = async (req,res,next)=>{
     try {
         let users = await User.getAllUser();
@@ -20,6 +21,20 @@ exports.getAll = async (req,res,next)=>{
             error: e
         })
     }
+};
+exports.getProfile = async(req,res,next)=>{
+    let user = req.user;
+    if(!user){
+        return res.status(404).json({
+            messenger:'Not fond user...!',
+            code:404
+        });
+    }
+    res.status(200).json({
+        messenger:'successful...!',
+        code: 200,
+        data: user
+    })
 };
 exports.createUser = async (req,res,next)=>{
     try {
@@ -43,24 +58,26 @@ exports.createUser = async (req,res,next)=>{
             error: e
         });
     }
-}
+};
 exports.loginUser = async (req,res,next)=>{
     try {
         let login ={
             email: req.body.email,
             password: req.body.password
         }
-        let user = await User.findByUser(login)
+        let user = await User.findByUser(login);
         if(!user){
             return res.status(400).json({
                 messenger:"email or password wrong...!",
                 code:400
             });
         }
+       let token= await User.generateAuthToken(user);
         res.status(200).json({
             messenger:'login success...!',
             code : 200,
-            data:user
+            data:user,
+            token: token
         });
     } catch (e) {
         res.status(500).json({
@@ -69,4 +86,12 @@ exports.loginUser = async (req,res,next)=>{
             error:e
         });
     }
-}
+};
+exports.logoutUser = async(req,res,next)=>{
+    req.user = undefined;
+    req.token = undefined;
+    res.status(200).json({
+        messenger:'successful...!',
+        code: 200
+    });
+};
