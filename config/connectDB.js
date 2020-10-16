@@ -29,7 +29,7 @@ const setRole= async()=>{
     attributes:['name'],
   });
   await roleData.forEach(x => {
-    databaseShop.ROLES.push(JSON.stringify(x.dataValues.name));
+    databaseShop.ROLES.push(x.dataValues.name);
   });
 }
 setRole();

@@ -20,12 +20,13 @@ exports.authenticationToken = async (req,res,next)=>{
                 code: 401
             });
         }
-        req.user= user;
+        req.user= user.dataValues;
         next();
     } catch (e) {
         return res.status(500).json({
             messenger:'Not authorization, please login...!',
-            code: 500
+            code: 500,
+            error: e.message
         });
     }
 };
