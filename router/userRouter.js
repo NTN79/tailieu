@@ -15,7 +15,7 @@ let Storage = multer.diskStorage({
 })
 const uploadAvatar = multer({
     limits:{
-        fieldSize: 10000
+        fieldSize: 1024*1024*3
     },
     fileFilter: function(req, file, cb) {
         if (!file.originalname.match(/(\.jpg|\.jpeg|\.png|\.gif)$/)) {
