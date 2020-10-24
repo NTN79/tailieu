@@ -45,6 +45,20 @@ exports.updateUserProfile = async(id,user)=>{
         return null;
     }  
 };
+exports.updateAvatar = async (id,file)=>{
+    try {
+        let userUpdate= await Users.update({
+            avatar: file
+        },{
+            where:{ id:id }
+        });
+        if(!userUpdate){ throw new Error('user update avatar fail...!')}
+        console.log(userUpdate,id,"updated user avatar successful...!");
+        return userUpdate;
+    } catch (e) {
+        return null;
+    }  
+}
 exports.delete = async(id)=>{
     try {
         let result = await Users.destroy({

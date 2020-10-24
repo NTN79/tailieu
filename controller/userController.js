@@ -155,3 +155,29 @@ exports.deleteUser = async(req,res,next)=>{
         });
     }
 };
+exports.uploadAvatar = async(req,res,next)=>{
+    try {   
+        let _id = req.user.id;
+        let _fileName = req.file.originalname;
+        let result = await User.updateAvatar(_id,_fileName);
+        if(!result){
+            return res.status(400).json({
+                messenger: "update fail...!",
+                code : 400
+            });
+        }
+        let user = await User.findById(req.user.id);
+        req.user  = user;
+        res.status(200).json({
+            messenger: "update successful...!",
+            code : 200,
+            data: user
+        });
+    } catch (error) {
+        res.status(500).json({
+            messenger: "update Error...!",
+            code : 500,
+            error:e.message
+        });
+    }
+};
