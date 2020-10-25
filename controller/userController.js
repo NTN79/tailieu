@@ -158,7 +158,7 @@ exports.deleteUser = async(req,res,next)=>{
 exports.uploadAvatar = async(req,res,next)=>{
     try {   
         let _id = req.user.id;
-        let _fileName = req.file.originalname;
+        let _fileName =`${req.user.id}-${req.file.originalname.replace(' ','').toLocaleUpperCase()}`;
         let result = await User.updateAvatar(_id,_fileName);
         if(!result){
             return res.status(400).json({

@@ -7,10 +7,10 @@ const multer = require('multer');
 
 let Storage = multer.diskStorage({
     filename:function(req,file,cb){
-        cb(null,file.originalname);
+        cb(null,`${req.user.id}-${file.originalname.replace(' ','').toLocaleUpperCase()}`);
     },
     destination: function(req,file,cb){
-        cb(null,'uploads/avatar');
+        cb(null,'public/uploads/avatars');
     }
 })
 const uploadAvatar = multer({
