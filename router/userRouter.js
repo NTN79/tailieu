@@ -19,7 +19,7 @@ const uploadAvatar = multer({
     },
     fileFilter: function(req, file, cb) {
         if (!file.originalname.match(/(\.jpg|\.jpeg|\.png|\.gif)$/)) {
-            return cb(new Error('file upload an image..!'), undefined);
+            return cb(new Error('file upload an image...!'), undefined);
         }
         cb(undefined, true);
     },
