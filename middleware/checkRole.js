@@ -10,7 +10,7 @@ exports.isAdminShop= async (req,res,next)=>{
             return;
         }
         res.status(403).json({
-            messenger:'login authorization fail...!',
+            messenger:'login authorization manager fail...!',
             code :403
         });
     } catch (e) {

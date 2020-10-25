@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser= require('body-parser');
 const userRouter = require('./router/userRouter');
+const trademarkRouter = require('./router/trademarkRouter');
 require('dotenv').config({path:"./.env"});
 
 //connect db
@@ -19,7 +20,7 @@ app.use(bodyParser.json());
 
 //router api
 app.use('/api/user',userRouter);
-
+app.use('/api/trademark',trademarkRouter);
 
 //app listen port
 const port = process.env.PORT || 8080;

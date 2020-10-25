@@ -26,7 +26,7 @@ exports.authenticationToken = async (req,res,next)=>{
         return res.status(500).json({
             messenger:'Not authorization, please login...!',
             code: 500,
-            error: e.message
+            error: 'Cannot read property...!'
         });
     }
 };

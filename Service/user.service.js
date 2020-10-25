@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config({path:'../.env'});
 
+
 exports.getAllUser= async()=>{
     try {
         let users = await Users.findAll();
@@ -15,8 +16,11 @@ exports.getAllUser= async()=>{
 };
 exports.createUser= async (req)=>{
     try {
+        let _countUsers = await Users.findAndCountAll({attributes:['id']});
+        let _id = _countUsers.count+1;
         let PasswordHash = await bcrypt.hash(req.body.password,12);
         let user = Users.build({
+            id:_id,
             fistName: req.body.fistName,
             lastName: req.body.lastName,
             birthday: req.body.birthday,
@@ -27,8 +31,8 @@ exports.createUser= async (req)=>{
             password: PasswordHash,
             roleId: (req.body.role)?req.body.role: 2
         });
-        await user.save();
-        return user;
+        const result =await user.save();
+        return result;
     } catch (e) {
         return null;
     }
@@ -94,7 +98,7 @@ exports.findByUser= async ({email,password})=>{
         if(!user){ throw new Error('email incorrect...!');}
         let isPassword = await bcrypt.compare(password,user.password);
         if(!isPassword){ throw new Error('password wrong...!');}
-        return user;
+        return user.id;
     } catch (e) {
         return null;
     }

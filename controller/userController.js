@@ -57,7 +57,7 @@ exports.createUser = async (req, res, next) => {
         res.status(201).json({
             messenger: 'create success...!!',
             code: 201,
-            data: user
+            data: user.email
         });
     } catch (e) {
         res.status(500).json({
@@ -73,13 +73,14 @@ exports.loginUser = async (req, res, next) => {
             email: req.body.email,
             password: req.body.password
         }
-        let user = await User.findByUser(login);
-        if (!user) {
+        let result = await User.findByUser(login);
+        if (!result) {
             return res.status(400).json({
                 messenger: "email or password wrong...!",
                 code: 400
             });
         }
+        let user = await User.findById(result);
         let token = await User.generateAuthToken(user);
         res.status(200).json({
             messenger: 'login success...!',
@@ -138,6 +139,15 @@ exports.updateProfile = async (req, res, next) => {
 };
 exports.deleteUser = async (req, res, next) => {
     try {
+        let avatarOld =req.user.avatar;
+        if (avatarOld ) {
+                fs.unlink(`./public/uploads/avatars/${avatarOld}`, (err, data) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                    console.log("deleted image avatar user...!");
+                });
+        }
         let id = req.user.id;
         let result = await User.delete(id);
         if (!result) { throw new Error('Error delete...!'); }

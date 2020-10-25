@@ -37,9 +37,15 @@ databaseShop.Users.belongsTo(databaseShop.role,{
   foreignKey:"roleId",
   otherKey:"id"
 });
+databaseShop.Products.hasMany(databaseShop.ImageProduct,{
+  as:"images"
+});
 databaseShop.ImageProduct.belongsTo(databaseShop.Products,{
   foreignKey:"productId",
   otherKey:"id"
+});
+databaseShop.Trademark.hasMany(databaseShop.Products,{ 
+  as:"products"
 });
 databaseShop.Products.belongsTo(databaseShop.Trademark,{
   foreignKey:"trademarkId",
