@@ -6,19 +6,19 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true
       },
       madeIn: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(50)
       },
       color:{
-          type:Sequelize.STRING,
+          type:Sequelize.STRING(50)
       },
       quality:{
-          type:Sequelize.STRING
+          type:Sequelize.STRING(50)
       },
       function:{
-          type:Sequelize.STRING
+          type:Sequelize.STRING(100)
       },
       machine:{
-          type:Sequelize.STRING
+          type:Sequelize.STRING(100)
       },
       size:{
           type:Sequelize.INTEGER

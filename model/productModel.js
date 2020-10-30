@@ -1,9 +1,8 @@
 module.exports = (sequelize, Sequelize) => {
     const Product = sequelize.define("products", {
-      id: {
+      productId: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+        primaryKey: true
       },
       name: {
         type: Sequelize.STRING,

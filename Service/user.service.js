@@ -16,11 +16,11 @@ exports.getAllUser= async()=>{
 };
 exports.createUser= async (req)=>{
     try {
-        let _countUsers = await Users.findAndCountAll({attributes:['id']});
+        let _countUsers = await Users.findAndCountAll({attributes:['userId']});
         let _id = _countUsers.count+1;
         let PasswordHash = await bcrypt.hash(req.body.password,12);
         let user = Users.build({
-            id:_id,
+            userId:_id,
             fistName: req.body.fistName,
             lastName: req.body.lastName,
             birthday: req.body.birthday,
@@ -29,18 +29,20 @@ exports.createUser= async (req)=>{
             address: req.body.address,
             email: req.body.email,
             password: PasswordHash,
-            roleId: (req.body.role)?req.body.role: 2
+            roleId: (req.body.role)?req.body.role: 2,
         });
         const result =await user.save();
+        console.log(result)
         return result;
     } catch (e) {
+        console.log(e.message);
         return null;
     }
 };
 exports.updateUserProfile = async(id,user)=>{
     try {
         let userUpdate= await Users.update(user,{
-            where:{ id:id }
+            where:{ userId:id }
         });
         if(!userUpdate){ throw new Error('user update fail...!')}
         console.log(userUpdate,"updated an user successful...!");
@@ -54,7 +56,7 @@ exports.updateAvatar = async (id,file)=>{
         let userUpdate= await Users.update({
             avatar: file
         },{
-            where:{ id:id }
+            where:{ userId:id }
         });
         if(!userUpdate){ throw new Error('user update avatar fail...!')}
         console.log(userUpdate,id,"updated user avatar successful...!");
@@ -68,7 +70,7 @@ exports.delete = async(id)=>{
         let result = await Users.destroy({
             force:true,
             where:{
-                id:id
+                userId:id
             }
         });
         if(!result){throw new Error('delete Error...!');}
@@ -78,14 +80,18 @@ exports.delete = async(id)=>{
     }
 }
 exports.findById= async(id)=>{
-    let user = await Users.findOne({
-        attributes:['id','fistName', 'lastName', 'birthday', 'phone', 'gender', 'address', 'email','avatar'],
-        where:{
-            id:id
-        }
-    })
-    if(!user){return null};
-    return user;
+    try {
+        let user = await Users.findOne({
+            attributes:['userId','fistName', 'lastName', 'birthday', 'phone', 'gender', 'address', 'email','avatar'],
+            where:{
+                userId:id
+            }
+        })
+        if(!user){return null};
+        return user;
+    } catch (e) {
+        return null;
+    }
 };
 exports.findByUser= async ({email,password})=>{
     try {
@@ -98,24 +104,32 @@ exports.findByUser= async ({email,password})=>{
         if(!user){ throw new Error('email incorrect...!');}
         let isPassword = await bcrypt.compare(password,user.password);
         if(!isPassword){ throw new Error('password wrong...!');}
-        return user.id;
+        return user.userId;
     } catch (e) {
         return null;
     }
 };
 exports.getRole= async(id)=>{
-    let user = await Users.findOne({
-        attributes:['roleId'],
-        where:{
-            id:id
-        }
-    })
-    if(!user){return null};
-    return user.roleId;
+    try {
+        let user = await Users.findOne({
+            attributes:['roleId'],
+            where:{
+                userId:id
+            }
+        })
+        if(!user){return null};
+        return user.roleId;   
+    } catch (e) {
+        return null;
+    }
 };
 exports.generateAuthToken = async (user)=>{
-    let token = await jwt.sign({_id:user.id},process.env.JWT_KEY,{
-        expiresIn:86400
-    });
-    return token;
+    try {
+        let token = await jwt.sign({_id:user.userId},process.env.JWT_KEY,{
+            expiresIn:86400
+        });
+        return token;
+    } catch (e) {
+        throw new Error('e');
+    }
 };

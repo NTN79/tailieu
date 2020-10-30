@@ -3,9 +3,9 @@ const User = require('../Service/user.service');
 
 exports.isAdminShop= async (req,res,next)=>{
     try {
-        let userRole =  await User.getRole(req.user.id);
-        let role = ROLES[userRole-1];
-        if(role==="admin"){
+        let userRole =  await User.getRole(req.user.userId);
+        let role = ROLES[userRole-1].replace('Role_','').toLocaleUpperCase();
+        if(role==="ADMIN"){
             next();
             return;
         }

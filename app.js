@@ -4,6 +4,8 @@ const bodyParser= require('body-parser');
 const userRouter = require('./router/userRouter');
 const trademarkRouter = require('./router/trademarkRouter');
 require('dotenv').config({path:"./.env"});
+const {Role}= require("./config/connectDB");
+
 
 //connect db
 const dbShop = require('./config/connectDB');

@@ -3,10 +3,10 @@ const { Op } = require('sequelize');
 
 exports.createTrademark = async (body) => {
     try {
-        let _countUsers = await Trademark.findAndCountAll({ attributes: ['id'] });
+        let _countUsers = await Trademark.findAndCountAll({ attributes: ['trademarkId'] });
         let _id = _countUsers.count + 1;
         let trademarkNew = Trademark.build({
-            id: _id,
+            trademarkId: _id,
             name: body.name.toLocaleUpperCase(),
             description: body.description
         });
@@ -27,4 +27,19 @@ exports.getAllTrademark = async()=>{
     } catch (e) {
         return null;
     }
-}
+};
+exports.getById = async (id)=>{
+    try {
+        let trademark = await Trademark.findOne({
+            where:{
+                trademarkId: id
+            }
+        });
+        if(!trademark){
+            throw new Error("not found trademark...!");
+        }
+        return trademark;
+    } catch (e) {
+        return null;
+    }
+};

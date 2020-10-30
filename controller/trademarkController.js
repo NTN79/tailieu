@@ -45,3 +45,26 @@ exports.getAllTrademark = async (req, res, next)=>{
         })
     }
 };
+exports.getTrademarkId = async (req,res,next)=>{
+    try {
+        let _id = req.params.id
+        let trademark = await Trademark.getById(_id);
+        if(!trademark){
+            return res.status(404).json({
+                messenger:`not found trademark ${_id}`,
+                code:404
+            });
+        }
+        res.status(200).json({
+            messenger:"get successful...!",
+            code: 200,
+            data: trademark
+        });
+    } catch (e) {
+        res.status(500).json({
+            messenger:"find data Error",
+            code: 500,
+            error: e
+        });
+    }
+};

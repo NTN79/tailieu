@@ -114,7 +114,7 @@ exports.updateProfile = async (req, res, next) => {
                 throw new Error('input wrong...!');
             }
         });
-        let _id = req.user.id;
+        let _id = req.user.userId;
         let result = await User.updateUserProfile(_id, req.body);
         if (!result) {
             return res.status(400).json({
@@ -122,7 +122,7 @@ exports.updateProfile = async (req, res, next) => {
                 code: 400
             });
         }
-        let user = await User.findById(req.user.id);
+        let user = await User.findById(req.user.userId);
         req.user = user;
         res.status(200).json({
             messenger: "update successful...!",
@@ -148,7 +148,7 @@ exports.deleteUser = async (req, res, next) => {
                     console.log("deleted image avatar user...!");
                 });
         }
-        let id = req.user.id;
+        let id = req.user.userId;
         let result = await User.delete(id);
         if (!result) { throw new Error('Error delete...!'); }
         req.user = undefined;
@@ -168,8 +168,8 @@ exports.deleteUser = async (req, res, next) => {
 exports.uploadAvatar = async (req, res, next) => {
     try {
         let avatarOld =req.user.avatar;
-        let _id = req.user.id;
-        let _fileName =`${req.user.id}-${req.file.originalname.replace(' ','').toLocaleUpperCase()}`;
+        let _id = req.user.userId;
+        let _fileName =`${_id}-${req.file.originalname.replace(' ','').toLocaleUpperCase()}`;
         if (avatarOld ) {
             if(avatarOld !=_fileName){
                 fs.unlink(`./public/uploads/avatars/${avatarOld}`, (err, data) => {
@@ -187,7 +187,7 @@ exports.uploadAvatar = async (req, res, next) => {
                 code : 400
             });
         }
-        let user = await User.findById(req.user.id);
+        let user = await User.findById(req.user.userId);
         req.user  = user;
         res.status(200).json({
             messenger: "update successful...!",
