@@ -14,6 +14,7 @@ exports.createTrademark = async (body) => {
         console.log('created a trademark...!');
         return result;
     } catch (e) {
+        console.log(e.message);
         return null;
     }
 };
@@ -25,10 +26,11 @@ exports.getAllTrademark = async()=>{
         }
         return trademark;
     } catch (e) {
+        console.log(e.message);
         return null;
     }
 };
-exports.getById = async (id)=>{
+exports.findById = async (id)=>{
     try {
         let trademark = await Trademark.findOne({
             where:{
@@ -40,6 +42,31 @@ exports.getById = async (id)=>{
         }
         return trademark;
     } catch (e) {
+        console.log(e.message);
         return null;
     }
 };
+exports.updateTrademark= async (id, {body})=>{
+    try {
+        let result = await Trademark.update({
+            name: body.name,
+            description:body.description
+        },{
+            where:{trademarkId:id}
+        });
+        if(!result){
+            throw new Error("update Trademark fail...!");
+        }
+        return result;
+    } catch (e) {
+        console.log(e.message);
+        return null;
+    }
+};
+// exports.updateLogoTrademark = async (logoName)=>{
+//     try {
+        
+//     } catch (e) {
+        
+//     }
+// }

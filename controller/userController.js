@@ -1,22 +1,44 @@
 const User = require('../Service/user.service');
 const fs = require('fs');
+const multer = require('multer');
+
+let Storage = multer.diskStorage({
+    filename:function(req,file,cb){
+        cb(null,`${req.user.userId}-${file.originalname.replace(' ','').toLocaleUpperCase()}`);
+    },
+    destination: function(req,file,cb){
+        cb(null,'public/uploads/avatars');
+    }
+})
+exports.uploadFile = multer({
+    limits:{
+        fieldSize: 1024*1024*3
+    },
+    fileFilter: function(req, file, cb) {
+       if(file. mimetype ==='image/png'||file. mimetype ==='image/jpeg'||file. mimetype ==='image/gif'||file. mimetype ==='image/jpg')  {
+            cb(null, true);
+        }
+        cb(null, false);
+    },
+    storage: Storage
+});
 
 exports.getAll = async (req, res, next) => {
     try {
         let users = await User.getAllUser();
         if (!users) {
             return res.status(404).json({
-                messenger: 'not found...!',
+                message: 'not found...!',
                 code: 404
             });
         }
         res.status(200).json({
-            messenger: 'successful...!',
+            message: 'successful...!',
             data: users
         })
     } catch (e) {
         res.status(500).json({
-            messenger: 'error...',
+            message: 'error...',
             code: 500,
             error: e.message
         })
@@ -27,18 +49,18 @@ exports.getProfile = async (req, res, next) => {
         let user = req.user;
         if (!user) {
             return res.status(404).json({
-                messenger: 'Not fond user...!',
+                message: 'Not fond user...!',
                 code: 404
             });
         }
         res.status(200).json({
-            messenger: 'successful...!',
+            message: 'successful...!',
             code: 200,
             data: user
         });
     } catch (e) {
         res.status(500).json({
-            messenger: 'Error...!',
+            message: 'Error...!',
             code: 500,
             error: e.message
         });
@@ -49,19 +71,19 @@ exports.createUser = async (req, res, next) => {
         let user = await User.createUser(req);
         if (!user) {
             return res.status(400).json({
-                messenger: "create User fails...!!",
+                message: "create User fails...!!",
                 code: 400
             });
         }
         console.log('create a new user...!')
         res.status(201).json({
-            messenger: 'create success...!!',
+            message: 'create success...!!',
             code: 201,
             data: user.email
         });
     } catch (e) {
         res.status(500).json({
-            messenger: 'Error created...!',
+            message: 'Error created...!',
             code: 500,
             error: e.message
         });
@@ -76,21 +98,21 @@ exports.loginUser = async (req, res, next) => {
         let result = await User.findByUser(login);
         if (!result) {
             return res.status(400).json({
-                messenger: "email or password wrong...!",
+                message: "email or password wrong...!",
                 code: 400
             });
         }
         let user = await User.findById(result);
         let token = await User.generateAuthToken(user);
         res.status(200).json({
-            messenger: 'login success...!',
+            message: 'login success...!',
             code: 200,
             data: user,
             token: token
         });
     } catch (e) {
         res.status(500).json({
-            messenger: 'login Error...!',
+            message: 'login Error...!',
             code: 500,
             error: e.message
         });
@@ -101,14 +123,14 @@ exports.logoutUser = async (req, res, next) => {
     req.token = undefined;
     req.headers.authorization = undefined;
     res.status(200).json({
-        messenger: 'successful...!',
+        message: 'successful...!',
         code: 200
     });
 };
 exports.updateProfile = async (req, res, next) => {
     try {
         let keyUpdate = Object.keys(req.body);
-        let field = ['roleId', 'id'];
+        let field = ['roleId', 'userId'];
         await field.forEach(x => {
             if (keyUpdate.includes(x)) {
                 throw new Error('input wrong...!');
@@ -118,20 +140,20 @@ exports.updateProfile = async (req, res, next) => {
         let result = await User.updateUserProfile(_id, req.body);
         if (!result) {
             return res.status(400).json({
-                messenger: "update fail...!",
+                message: "update fail...!",
                 code: 400
             });
         }
         let user = await User.findById(req.user.userId);
         req.user = user;
         res.status(200).json({
-            messenger: "update successful...!",
+            message: "update successful...!",
             code: 200,
             data: user
         });
     } catch (e) {
         res.status(500).json({
-            messenger: "update Error...!",
+            message: "update Error...!",
             code: 500,
             error: e.message
         });
@@ -154,12 +176,12 @@ exports.deleteUser = async (req, res, next) => {
         req.user = undefined;
         req.token = undefined;
         res.status(200).json({
-            messenger: 'delete successful...!',
+            message: 'delete successful...!',
             code: 200
         });
     } catch (e) {
         res.status(500).json({
-            messenger: 'delete fail...!',
+            message: 'delete fail...!',
             code: 500,
             error: e.message
         });
@@ -183,20 +205,20 @@ exports.uploadAvatar = async (req, res, next) => {
         let result = await User.updateAvatar(_id,_fileName);
         if(!result){
             return res.status(400).json({
-                messenger: "update fail...!",
+                message: "update fail...!",
                 code : 400
             });
         }
         let user = await User.findById(req.user.userId);
         req.user  = user;
         res.status(200).json({
-            messenger: "update successful...!",
+            message: "update successful...!",
             code: 200,
             data: user
         });
-    } catch (error) {
+    } catch (e) {
         res.status(500).json({
-            messenger: "update Error...!",
+            message: "update Error...!",
             code: 500,
             error: e.message
         });

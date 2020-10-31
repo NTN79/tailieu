@@ -11,6 +11,7 @@ exports.getAllUser= async()=>{
         if(!users){throw new Error('not fond...')}
         return users;
     } catch (e) {
+        console.log(e.message);
         return null;
     }
 };
@@ -48,6 +49,7 @@ exports.updateUserProfile = async(id,user)=>{
         console.log(userUpdate,"updated an user successful...!");
         return userUpdate;
     } catch (e) {
+        console.log(e.message);
         return null;
     }  
 };
@@ -62,6 +64,7 @@ exports.updateAvatar = async (id,file)=>{
         console.log(userUpdate,id,"updated user avatar successful...!");
         return userUpdate;
     } catch (e) {
+        console.log(e.message);
         return null;
     }  
 }
@@ -76,6 +79,7 @@ exports.delete = async(id)=>{
         if(!result){throw new Error('delete Error...!');}
         return result
     } catch (e) {
+        console.log(e.message);
         return null;
     }
 }
@@ -90,6 +94,7 @@ exports.findById= async(id)=>{
         if(!user){return null};
         return user;
     } catch (e) {
+        console.log(e.message);
         return null;
     }
 };
@@ -106,6 +111,7 @@ exports.findByUser= async ({email,password})=>{
         if(!isPassword){ throw new Error('password wrong...!');}
         return user.userId;
     } catch (e) {
+        console.log(e.message);
         return null;
     }
 };
@@ -120,6 +126,7 @@ exports.getRole= async(id)=>{
         if(!user){return null};
         return user.roleId;   
     } catch (e) {
+        console.log(e.message);
         return null;
     }
 };
@@ -130,6 +137,6 @@ exports.generateAuthToken = async (user)=>{
         });
         return token;
     } catch (e) {
-        throw new Error('e');
+        throw new Error(e.message);
     }
 };

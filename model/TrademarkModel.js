@@ -1,3 +1,5 @@
+const imageProductModel = require("./imageProductModel");
+
 module.exports = (sequelize, Sequelize) => {
     const Trademark = sequelize.define("trademark", {
       trademarkId: {
@@ -10,7 +12,10 @@ module.exports = (sequelize, Sequelize) => {
         allowNull:false
       },
        description:{
-          type:Sequelize.STRING(200)
+        type:Sequelize.STRING(200)
+      },
+      image:{
+        type: Sequelize.STRING(60)
       }
     },{
       freezeTableName: true
