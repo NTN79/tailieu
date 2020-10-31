@@ -5,9 +5,11 @@ const auth = require('../middleware/authentication').authenticationToken;
 const {isAdminShop} = require('../middleware/checkRole');
 
 
-router.get('/',[auth,isAdminShop],trademarkController.getAllTrademark);
-router.post('/',[auth,isAdminShop],trademarkController.createTrademark);
+router.get('/',trademarkController.getAllTrademark);
 router.get('/detail/:id',trademarkController.getTrademarkId);
+router.post('/',[auth,isAdminShop],trademarkController.createTrademark);
+router.post('/logo/:id',[auth,isAdminShop],trademarkController.uploadFile.single("logo"),trademarkController.updateLogo);
 router.patch('/detail/:id',[auth,isAdminShop],trademarkController.updateTrademarkId);
-router.post('/logo/:id',trademarkController.uploadLogoTrademark,trademarkController.updateLogo);
+router.delete('/detail/:id',trademarkController.deleteTrademark);
+
 module.exports = router;

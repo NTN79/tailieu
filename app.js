@@ -16,11 +16,21 @@ dbShop.sequelize.sync().then( async()=>{
   console.log(e,'db connect fail  ...!')
 });
 
-//handing Error
+
 app.use(morgan('dev'));
+// parse application/json
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+
+//router api
+app.use('/api/user',userRouter);
+app.use('/api/trademark',trademarkRouter);
+
+//handing Error
 app.use((req,res,next)=>{
   const error = new Error("page not found...!");
-  error.status=404;
+  error.status = 404;
   next(error);
 });
 app.use((error,req,res,next)=>{
@@ -30,14 +40,6 @@ app.use((error,req,res,next)=>{
     error: error.message
   });
 });
-// parse application/json
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-
-//router api
-app.use('/api/user',userRouter);
-app.use('/api/trademark',trademarkRouter);
 
 //app listen port
 const port = process.env.PORT || 8080;

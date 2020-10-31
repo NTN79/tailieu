@@ -7,7 +7,7 @@ let Storage = multer.diskStorage({
         cb(null,`${req.user.userId}-${file.originalname.replace(' ','').toLocaleUpperCase()}`);
     },
     destination: function(req,file,cb){
-        cb(null,'public/uploads/avatars');
+        cb(null,'public/img/avatars');
     }
 })
 exports.uploadFile = multer({
@@ -163,7 +163,7 @@ exports.deleteUser = async (req, res, next) => {
     try {
         let avatarOld =req.user.avatar;
         if (avatarOld ) {
-                fs.unlink(`./public/uploads/avatars/${avatarOld}`, (err, data) => {
+                fs.unlink(`./public/img/avatars/${avatarOld}`, (err, data) => {
                     if (err) {
                         console.log(err);
                     }
@@ -189,12 +189,15 @@ exports.deleteUser = async (req, res, next) => {
 };
 exports.uploadAvatar = async (req, res, next) => {
     try {
+        if(!req.file){
+            throw new Error('avatar upload not an image...!');
+        }
         let avatarOld =req.user.avatar;
         let _id = req.user.userId;
         let _fileName =`${_id}-${req.file.originalname.replace(' ','').toLocaleUpperCase()}`;
         if (avatarOld ) {
             if(avatarOld !=_fileName){
-                fs.unlink(`./public/uploads/avatars/${avatarOld}`, (err, data) => {
+                fs.unlink(`./public/img/avatars/${avatarOld}`, (err, data) => {
                     if (err) {
                         console.log(err);
                     }
@@ -217,6 +220,7 @@ exports.uploadAvatar = async (req, res, next) => {
             data: user
         });
     } catch (e) {
+        console.log("Error: ",e.message);
         res.status(500).json({
             message: "update Error...!",
             code: 500,

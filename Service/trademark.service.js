@@ -63,10 +63,24 @@ exports.updateTrademark= async (id, {body})=>{
         return null;
     }
 };
-// exports.updateLogoTrademark = async (logoName)=>{
-//     try {
-        
-//     } catch (e) {
-        
-//     }
-// }
+exports.updateLogoTrademark = async (id,logoName)=>{
+    try {
+        let result= await Trademark.update({
+            image: logoName
+        },{
+            where:{
+                trademarkId: id
+            }
+        });
+        if(!result){
+            throw new Error("update logo fail...!");
+        }
+        return result;
+    } catch (e) {
+        console.log(e.message);
+        return null; 
+    }
+};
+// exports.deleteTrademarkId = async (id)=>{
+
+// };

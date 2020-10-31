@@ -1,6 +1,30 @@
 const Trademark = require('../Service/trademark.service');
+const fs = require('fs');
+const multer = require('multer');
 
-
+let Storage = multer.diskStorage({
+    filename:function(req,file,cb){
+        cb(null,`${req.params.id}-trademark-${file.originalname.replace(' ','')}`.toLocaleUpperCase());
+    },
+    destination: function(req,file,cb){
+        cb(null,'public/img/logo');
+    }
+})
+exports.uploadFile = multer({
+    limits:{
+        fieldSize: 1024*1024*3
+    },
+    fileFilter: function(req, file, cb) {
+       if(file. mimetype ==='image/png'
+            ||file. mimetype ==='image/jpeg'
+            ||file. mimetype ==='image/gif'
+            ||file. mimetype ==='image/jpg'){
+            cb(null, true);
+        }
+        cb(null, false);
+    },
+    storage: Storage
+});
 
 exports.createTrademark = async (req, res, next)=>{
     try {
@@ -99,37 +123,40 @@ exports.updateTrademarkId = async (req, res, next)=>{
         });
     }
 };
-
-
-const multer = require('multer');
-
-let Storage = multer.diskStorage({
-    filename:function(req,file,cb){
-        cb(null,`trademark-${file.originalname.replace(' ','').toLocaleUpperCase()}`);
-    },
-    destination: function(req,file,cb){
-        cb(null,'public/uploads/logo');
-    }
-})
-exports.uploadLogoTrademark = multer({
-    limits:{
-        fieldSize: 1024*1024*3
-    },
-    fileFilter: function(req, file, cb) {
-        if (!file.originalname.match(/(\.jpg|\.jpeg|\.png|\.gif)$/)) {
-            return cb(new Error('file upload an image...!'), undefined);
-        }
-        cb(undefined, true);
-    },
-    storage: Storage
-}).single('logo');
 exports.updateLogo = async (req,res,next)=>{
    try {
-       console.log(req.file);
+       if(!req.file){
+           throw new Error("logo upload not an image...!");
+       }
+       let _id = req.params.id;
+       let fileName = `${_id}-trademark-${req.file.originalname.replace(' ','')}`.toLocaleUpperCase();
+       let result = await Trademark.updateLogoTrademark(_id,fileName);
+       if(!result){
+           return res.status(400).json({
+               message: "logo upload fail...!",
+               code:400
+           });
+       }
+       let trademark = await Trademark.findById(_id);
+       console.log('a trademark updated...!');
+       res.status(200).json({
+           message:"success...!",
+           code : 200,
+           data: trademark
+       });
    } catch (e) {
-       console.log("cmm",e);
+       console.log("Error: ",e.message);
        res.json({
-           message:"fail"
-       })
+           message:"upload logo Error",
+           code:500,
+           error: e.message
+       });
    }
+};
+exports.deleteTrademark = async(req,res,next)=>{
+    try {
+        
+    } catch (e) {
+        
+    }
 };
