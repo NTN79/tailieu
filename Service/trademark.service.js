@@ -81,6 +81,21 @@ exports.updateLogoTrademark = async (id,logoName)=>{
         return null; 
     }
 };
-// exports.deleteTrademarkId = async (id)=>{
-
-// };
+exports.deleteTrademarkId = async (id)=>{
+    try {
+        let result = await Trademark.destroy({
+            force:true,
+            where: {
+                trademarkId : id
+            }
+        });
+        if(!result){
+            throw new Error("not fond trademark delete...!");
+        }
+        console.log("delete a trademark...!")
+        return result;
+    } catch (e) {
+        console.log(e.message);
+        return null;
+    }
+};

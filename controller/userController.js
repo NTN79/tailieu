@@ -163,7 +163,7 @@ exports.deleteUser = async (req, res, next) => {
     try {
         let avatarOld =req.user.avatar;
         if (avatarOld ) {
-                fs.unlink(`./public/img/avatars/${avatarOld}`, (err, data) => {
+                fs.unlink(`./public/img/avatars/${avatarOld}`, (err) => {
                     if (err) {
                         console.log(err);
                     }
