@@ -20,3 +20,36 @@ exports.create = async(productId , body)=>{
         return null;
     }
 };
+exports.delete = async(id)=>{
+    try {
+        let result = ImageProduct.destroy({
+            force: true,
+            where:{
+                id:id
+            }
+        })
+        if(!result){
+            throw new Error('delete image fail...!');
+        }
+        return result;
+    } catch (e) {
+        console.log(e.message);
+        return null;
+    }
+};
+exports.deleteProduct = async(productId)=>{
+    try {
+        let result = await ImageProduct.destroy({
+            where:{
+                productId: productId
+            }
+        });
+        if(!result){
+            throw new Error(`delete image product ${productId}`);
+        }
+        return result;
+    } catch (e) {
+        console.log(e.message);
+        return null;
+    }
+};
