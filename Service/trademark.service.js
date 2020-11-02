@@ -14,7 +14,7 @@ exports.createTrademark = async (body) => {
         console.log('created a trademark...!');
         return result;
     } catch (e) {
-        console.log(e.message);
+        console.log("Create trademark Error:",e.message);
         return null;
     }
 };
@@ -26,7 +26,7 @@ exports.getAllTrademark = async()=>{
         }
         return trademark;
     } catch (e) {
-        console.log(e.message);
+        console.log("get trademark Error:",e.message);
         return null;
     }
 };
@@ -42,7 +42,7 @@ exports.findById = async (id)=>{
         }
         return trademark;
     } catch (e) {
-        console.log(e.message);
+        console.log("find trademark Error:",e.message);
         return null;
     }
 };
@@ -59,7 +59,7 @@ exports.updateTrademark= async (id, {body})=>{
         }
         return result;
     } catch (e) {
-        console.log(e.message);
+        console.log("update trademark Error:",e.message);
         return null;
     }
 };
@@ -77,7 +77,7 @@ exports.updateLogoTrademark = async (id,logoName)=>{
         }
         return result;
     } catch (e) {
-        console.log(e.message);
+        console.log("update Logo trademark Error:",e.message);
         return null; 
     }
 };
@@ -95,7 +95,7 @@ exports.deleteTrademarkId = async (id)=>{
         console.log("delete a trademark...!")
         return result;
     } catch (e) {
-        console.log(e.message);
+        console.log("delete trademark Error:",e.message);
         return null;
     }
 };

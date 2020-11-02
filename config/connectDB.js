@@ -139,5 +139,4 @@ databaseShop.Blogs.belongsTo(databaseShop.Users,{
   foreignKey:"userId"
 });
 
-
 module.exports = databaseShop;

@@ -23,6 +23,7 @@ exports.authenticationToken = async (req,res,next)=>{
         req.user= user.dataValues;
         next();
     } catch (e) {
+        console.log("middleware Error: ",e.message);
         return res.status(500).json({
             message:'Not authorization, please login...!',
             code: 500,

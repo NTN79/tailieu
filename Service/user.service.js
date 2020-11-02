@@ -35,7 +35,7 @@ exports.createUser= async (req)=>{
         const result =await user.save();
         return result;
     } catch (e) {
-        console.log(e.message);
+        console.log("CreateError: ",e.message);
         return null;
     }
 };
@@ -93,7 +93,7 @@ exports.findById= async(id)=>{
         if(!user){return null};
         return user;
     } catch (e) {
-        console.log(e.message);
+        console.log("find user Error:",e.message);
         return null;
     }
 };
@@ -110,7 +110,6 @@ exports.findByUser= async ({email,password})=>{
         if(!isPassword){ throw new Error('password wrong...!');}
         return user.userId;
     } catch (e) {
-        console.log(e.message);
         return null;
     }
 };
@@ -125,7 +124,7 @@ exports.getRole= async(id)=>{
         if(!user){return null};
         return user.roleId;   
     } catch (e) {
-        console.log(e.message);
+        console.log("get role Error:",e.message);
         return null;
     }
 };
@@ -136,7 +135,7 @@ exports.generateAuthToken = async (user)=>{
         });
         return token;
     } catch (e) {
-        console.log(e.message);
+        console.log("set toke Error:",e.message);
         throw new Error(e.message);
     }
 };

@@ -29,7 +29,7 @@ exports.delete = async(id)=>{
             }
         })
         if(!result){
-            throw new Error('delete image fail...!');
+            throw new Error('delete image product fail...!');
         }
         return result;
     } catch (e) {

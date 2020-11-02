@@ -16,7 +16,7 @@ exports.create = async (productId , body)=>{
             let result = await detail.save();
             return result;
     } catch (e) {
-        console.log(e.message);
+        console.log("CreateError: ",e.message);
         return null;
     }
 };
@@ -32,7 +32,7 @@ exports.findById = async (id)=>{
         };
         return _detailProduct;
     } catch (e) {
-        console.log(e.message);
+        console.log("Error:",e.message);
         return null;
     }
 };
@@ -51,7 +51,7 @@ exports.update = async (id,body)=>{
             }
         });
         if(!_detailProduct){
-            throw new Error(`update detail error...!${id}`);
+            throw new Error(`update detail product error...!${id}`);
         };
         let result = await detailProduct.findOne({
             where :{
@@ -60,7 +60,7 @@ exports.update = async (id,body)=>{
         });
         return result 
     } catch (e) {
-        console.log(e.message);
+        console.log("Error:",e.message);
         return null;
     }
 };
@@ -77,7 +77,7 @@ exports.delete = (id)=>{
         }
         return result;
     } catch (e) {
-        console.log(e.message);
+        console.log("Error:",e.message);
         return  null;
     }
 };
