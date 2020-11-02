@@ -17,6 +17,7 @@ const databaseShop = {};
 
 databaseShop.Sequelize = Sequelize;
 databaseShop.sequelize = sequelize;
+//table -- Object
 databaseShop.Users = require('../model/userModel')(sequelize,Sequelize);
 databaseShop.Role = require('../model/roleModel')(sequelize,Sequelize);
 databaseShop.Products= require('../model/productModel')(sequelize,Sequelize);
@@ -24,10 +25,11 @@ databaseShop.Trademark = require('../model/TrademarkModel')(sequelize,Sequelize)
 databaseShop.detailProduct = require('../model/detailProductModel')(sequelize,Sequelize);
 databaseShop.ImageProduct = require('../model/imageProductModel')(sequelize,Sequelize);
 databaseShop.DetailCart = require("../model/detailCartModel")(sequelize,Sequelize);
+databaseShop.Bonus = require("../model/bonus")(sequelize,Sequelize);
+databaseShop.detailBonus = require("../model/detailBonus")(sequelize,Sequelize);
 databaseShop.Comment = require("../model/commentModel")(sequelize,Sequelize);
 databaseShop.ListCart = require("../model/listCartModel")(sequelize,Sequelize);
 databaseShop.Blogs = require("../model/blogModel")(sequelize,Sequelize);
-
 
 const setRole= async()=>{
   databaseShop.ROLES=[];
@@ -44,6 +46,7 @@ databaseShop.Users.belongsTo(databaseShop.Role,{
   foreignKey:"roleId",
   otherKey:"id"
 });
+
 //Product
 databaseShop.Products.hasMany(databaseShop.ImageProduct,{
   foreignKey:"productId",
@@ -73,25 +76,53 @@ databaseShop.Comment.belongsTo(databaseShop.Products,{
   foreignKey:"productId",
   as:"products"
 });
+
 //ListCart
-databaseShop.Users.belongsToMany(databaseShop.Products,{
-  through:databaseShop.ListCart,
-  foreignKey:"UserId",
-  otherKey:"ProductId"
+databaseShop.Users.hasMany(databaseShop.ListCart,{
+  foreignKey:"userId",
+  as:"listCarts"
 });
-databaseShop.Products.belongsToMany(databaseShop.Users,{
-  through:databaseShop.ListCart,
-  foreignKey:"ProductId",
-  otherKey:"UserId"
+databaseShop.ListCart.belongsTo(databaseShop.Users,{
+  foreignKey:"userId",
+  as:"users"
 });
-databaseShop.DetailCart.hasMany(databaseShop.ListCart,{
-  foreignKey:"cartId",
+databaseShop.Products.hasMany(databaseShop.DetailCart,{
+  foreignKey:"productId",
+  as:"listCarts"
+});
+databaseShop.DetailCart.belongsTo(databaseShop.Products,{
+  foreignKey:"productId",
+  as:"products"
+});
+databaseShop.ListCart.hasMany(databaseShop.DetailCart,{
+  foreignKey:"listCartId",
+  as:"detailCarts"
+});
+databaseShop.DetailCart.belongsTo(databaseShop.ListCart,{
+  foreignKey:"listCartId",
   as:"listCart"
 });
-databaseShop.ListCart.belongsTo(databaseShop.DetailCart,{
-  foreignKey:"cartId"
-})
-//User 
+
+//bonus -- discount price
+databaseShop.Bonus.hasMany(databaseShop.detailBonus,{
+  foreignKey:"bonusId",
+  as:"detailBonus"
+});
+databaseShop.detailBonus.belongsTo(databaseShop.Bonus,{
+  foreignKey:"bonusId",
+  as:"bonus"
+});
+//detail bonus-- product
+databaseShop.Products.hasMany(databaseShop.detailBonus,{
+  foreignKey:"productId",
+  as:"Bonus"
+});
+databaseShop.detailBonus.belongsTo(databaseShop.Bonus,{
+  foreignKey:"productId",
+  as:"products"
+});
+
+//User -- comment -- blog
 databaseShop.Users.hasMany(databaseShop.Comment,{
   foreignKey:"userId",
   as:"comments"

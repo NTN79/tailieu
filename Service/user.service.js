@@ -33,7 +33,6 @@ exports.createUser= async (req)=>{
             roleId: (req.body.role)?req.body.role: 2,
         });
         const result =await user.save();
-        console.log(result)
         return result;
     } catch (e) {
         console.log(e.message);
@@ -137,6 +136,7 @@ exports.generateAuthToken = async (user)=>{
         });
         return token;
     } catch (e) {
+        console.log(e.message);
         throw new Error(e.message);
     }
 };

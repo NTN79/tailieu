@@ -4,11 +4,15 @@ module.exports = (sequelize,Sequelize)=>{
             type: Sequelize.INTEGER,
             primaryKey: true
         },
+        productId:{
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
         quantity: {
             type: Sequelize.INTEGER,
             allowNull:false
         },
-        sumPrice:{
+        Price:{
             type:Sequelize.INTEGER,
             allowNull:false
         }

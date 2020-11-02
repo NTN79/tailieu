@@ -5,7 +5,6 @@ const authToken = require('../middleware/authentication').authenticationToken;
 const {isAdminShop} = require('../middleware/checkRole');
 
 
-
 router.get('/',[authToken , isAdminShop],userController.getAll);
 router.post('/',userController.createUser);
 router.post('/login',userController.loginUser);
