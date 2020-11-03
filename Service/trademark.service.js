@@ -35,7 +35,8 @@ exports.findById = async (id)=>{
         let trademark = await Trademark.findOne({
             where:{
                 trademarkId: id
-            }
+            },
+            raw:true
         });
         if(!trademark){
             throw new Error("not found trademark...!");

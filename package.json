@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js",
+    "dev": "node -v  && nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "hoang ky",
@@ -19,6 +19,7 @@
     "ejs-locals": "^1.0.2",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "formidable": "^1.2.2",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",

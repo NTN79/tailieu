@@ -13,6 +13,11 @@ module.exports = (sequelize, Sequelize) => {
           type: Sequelize.INTEGER,
           allowNull:false
       },
+      code:{
+        type: Sequelize.STRING(50),
+        allowNull: false,
+        unique: true
+      },
       dayAdd:{
           type: Sequelize.DATE,
       },

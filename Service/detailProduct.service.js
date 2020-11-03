@@ -25,7 +25,8 @@ exports.findById = async (id)=>{
         let _detailProduct = await detailProduct.findOne({
             where :{
                 id : id
-            }
+            },
+            raw:true
         });
         if(!_detailProduct){
             throw  new Error("not found detail Product...!");
@@ -64,7 +65,7 @@ exports.update = async (id,body)=>{
         return null;
     }
 };
-exports.delete = (id)=>{
+exports.delete = async (id)=>{
     try {
         let result = await detailProduct.destroy({
             force: true,

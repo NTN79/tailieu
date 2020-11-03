@@ -1,11 +1,11 @@
 const express = require('express');
 const app = express();
 const bodyParser= require('body-parser');
-const morgan = require("morgan")
+const morgan = require('morgan')
 const userRouter = require('./router/userRouter');
 const trademarkRouter = require('./router/trademarkRouter');
+const productRouter = require('./router/productRouter');
 require('dotenv').config({path:"./.env"});
-const {Role}= require("./config/connectDB");
 
 
 //connect db
@@ -26,6 +26,7 @@ app.use(bodyParser.json());
 //router api
 app.use('/api/user',userRouter);
 app.use('/api/trademark',trademarkRouter);
+app.use('/api/product',productRouter)
 
 //handing Error
 app.use((req,res,next)=>{
@@ -44,5 +45,5 @@ app.use((error,req,res,next)=>{
 //app listen port
 const port = process.env.PORT || 8080;
 app.listen(port,()=>{
-    console.log('app listen port:',port);
+    console.log(`app listen port: " ${port} "`);
 })  

@@ -1,18 +1,18 @@
 const {ImageProduct} =require("../config/connectDB");
 
-exports.create = async(productId , body)=>{
+exports.create = async(productId , fileName)=>{
     try {
         let _count = await ImageProduct.findAndCountAll({
             attributes:['id']
         });
         let imgNew = ImageProduct.build({
             id:  _count.count +1,
-            path: body.path,
+            path: fileName,
             productId: productId
         });
         let result = await imgNew.save();
         if(!result){
-            throw new Error(`add image ${body.path} fail...!`);
+            throw new Error(`add image ${fileName} fail...!`);
         }
         return result;
     } catch (e) {

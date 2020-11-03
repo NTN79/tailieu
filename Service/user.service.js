@@ -102,9 +102,10 @@ exports.findByUser= async ({email,password})=>{
         let result = await Users.findOne({
             where:{
                 email: email
-            }
+            },
+            raw:true
         });
-        let user= result.dataValues;
+        let user= result;
         if(!user){ throw new Error('email incorrect...!');}
         let isPassword = await bcrypt.compare(password,user.password);
         if(!isPassword){ throw new Error('password wrong...!');}
@@ -119,7 +120,8 @@ exports.getRole= async(id)=>{
             attributes:['roleId'],
             where:{
                 userId:id
-            }
+            },
+            raw:true
         })
         if(!user){return null};
         return user.roleId;   
