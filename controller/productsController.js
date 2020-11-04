@@ -1,19 +1,16 @@
 
 const Product = require("../Service/product.service");
 const Trademark = require("../Service/trademark.service");
-const formidable = require("formidable");
 const path = require("path");
 const fs = require("fs");
 const multer = require("multer");
 let Storage = multer.diskStorage({
     filename:function(req,file,cb){
-        cb(null,`${req.trademark}-${file.originalname.replace(' ','').toLocaleUpperCase()}`);
+        cb(null,`${req.body.name}${file.originalname.replace(' ','').toLocaleUpperCase()}`);
     },
-    destination: function(req,file,cb){
-        cb(null,`public/img/products/${req.trademark}`);
-    }
+    destination:`public/img/products/`
 })
-exports.uploadFile = multer({
+const uploadFile = multer({
     limits:{
         fieldSize: 1024*1024*3
     },
@@ -24,53 +21,23 @@ exports.uploadFile = multer({
         cb(null, false);
     },
     storage: Storage
-});
-
-exports.saveImgProduct = (req, res, next) => {
-
-    let form = formidable({ multiples: true });
-    form.parse(req, async (err, fields, files) => {
-        if (err) {
-            next(err);
-            return;
-        }
-        let trademark = await Trademark.findById(fields.trademarkId);
-        // form.uploadDir = path.join(__dirname, `../public/img/products/${trademark.name}`);
-        // //console.log(form.uploadDir);
-        //   files.image.map(file => {
-        //       fs.readFile(file.path,(err,data)=>{
-        //         if(err){
-        //             console.log("ERROR: %s",err.message);
-        //             return;
-        //         }
-        //         fs.writeFile(file.uploadDir,data,(err)=>{
-        //             if(err){
-        //                 console.log("Save Fails: ", err.message);
-        //                 return;
-        //             }
-        //             cononsole.log("complete...!");
-        //         })
-        //       });
-        //   });
-        // // form.on('fileBegin',function(name,file){
-        // //     console.log("fil name:",file.name);
-        // //     file.path = path.join(form.uploadDir,file.name);
-        // //     console.log(file);
-        // // });
-        req.body = fields;
-        req.files = files.image;
-        req.trademark = trademark;
-        // next();
-    });
-
-};
+}).array("image",10);
 
 exports.createProduct = async (req, res, next) => {
     try {
-        //console.log("files:",req.files);
-        res.json({
-            message: req.body
-        })
+        uploadFile(req,res,(err)=>{
+            if(err){
+                throw new Error(e.message);
+            }else if(err instanceof multer.MulterError){
+                throw new Error(err.message);
+            }
+            console.log(req.files);
+            res.json({
+                message: req.body,
+                data:req.files
+            })
+        });
+       
     } catch (e) {
         res.json({
             message: e.message
