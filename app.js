@@ -7,6 +7,8 @@ const trademarkRouter = require('./router/trademarkRouter');
 const productRouter = require('./router/productRouter');
 require('dotenv').config({path:"./.env"});
 
+const fileUpload = require("express-fileupload");
+app.use(fileUpload());
 
 //connect db
 const dbShop = require('./config/connectDB');
