@@ -23,13 +23,13 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING(100)
     },
     waterproof: {
-      type: Sequelize.STRING(100)
+      type: Sequelize.STRING(10)
     },
     size: {
-      type: Sequelize.INTEGER
+      type: Sequelize.FLOAT
     },
     thickness:{
-      type: Sequelize.INTEGER
+      type: Sequelize.FLOAT
     },
     guarantee: {
       type: Sequelize.INTEGER

@@ -25,6 +25,7 @@ let SaveImgProduct = async (images, productCode, trademark, callback) => {
                     callback('move file error...!', undefined);
                 }
                 listFile.push(imgName);
+                console.log('oke upload', index);
                 if (index === images.length - 1) {
                     callback(undefined, listFile);
                 }
@@ -43,18 +44,18 @@ exports.createProduct = async (req, res, next) => {
         }
         let images = req.files.images;
         let trademark = await Trademark.findById(req.body.trademarkId);
-        let product = req.body;
-        //let product = await Product.crateProduct(productNew);
+        let productNew = req.body;
+        let product = await Product.crateProduct(productNew);
         const productCode = product.code;
-        await SaveImgProduct(images, productCode, trademark, (err, data) => {
+        const _id = product.productId;
+        await SaveImgProduct(images, productCode, trademark, async (err, data) => {
             if (err) {
                 console.log(err);
             }
-            data.forEach(x => {
-                console.log(x);
-            });
-            //console.log(listImg);
-            res.status(200).json({
+            for (let i = 0; i < data.length; i++) {
+               await ImageProduct.create(_id,data[i]);
+            }
+            return res.status(201).json({
                 message: "create product successful...!",
                 code: 200,
                 data: product,
@@ -69,15 +70,20 @@ exports.createProduct = async (req, res, next) => {
         })
     }
 };
-exports.getProduct = async (req, res, next) => {
+exports.getProductId = async (req, res, next) => {
     try {
-
-        res.json({
-            message: "ok"
-        })
+        let _id = req.params.id;
+        let product = await Product.findById(_id);
+        res.status(200).json({
+            message: "get product successful...!",
+            code:200,
+            data: product
+        });
     } catch (e) {
-        res.json({
-            message: e.message
-        })
+        res.status(500).json({
+            message: "get product Error...!",
+            code:500,
+            error: e.message
+        });
     }
 }

@@ -27,3 +27,20 @@ exports.crateProduct = async (body)=>{
         return null;
     }
 };
+exports.findById = async (id)=>{
+    try {
+        let product = await Products.findOne({
+            where:{
+                productId:id
+            },
+            include:["detail","images"]
+        });
+        if(!product){
+            throw new Error('not find product id...!');
+        }
+        return product;
+    } catch (e) {
+        console.log(e.message);
+        return null;    
+    }
+};

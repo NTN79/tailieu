@@ -24,11 +24,11 @@ exports.create = async (productId , body)=>{
         return null;
     }
 };
-exports.findById = async (id)=>{
+exports.findByProductId = async (id)=>{
     try {
         let _detailProduct = await detailProduct.findOne({
             where :{
-                id : id
+                productId : id
             },
             raw:true
         });

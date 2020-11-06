@@ -64,6 +64,10 @@ databaseShop.Products.belongsTo(databaseShop.Trademark,{
   foreignKey:"trademarkId",
   as:"trademark"
 });
+databaseShop.Products.hasOne(databaseShop.detailProduct,{
+  foreignKey:"productId",
+  as:"detail"
+});
 databaseShop.detailProduct.belongsTo(databaseShop.Products,{
   foreignKey:"productId",
   as:"products"
