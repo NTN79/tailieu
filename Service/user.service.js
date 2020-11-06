@@ -60,8 +60,14 @@ exports.updateAvatar = async (id,file)=>{
             where:{ userId:id }
         });
         if(!userUpdate){ throw new Error('user update avatar fail...!')}
-        console.log(userUpdate,id,"updated user avatar successful...!");
-        return userUpdate;
+        let user = await Users.findOne({
+            attributes:['userId','fistName', 'lastName', 'birthday', 'phone', 'gender', 'address', 'email','avatar'],
+            where:{
+                userId:id
+            }
+        })
+        console.log(userUpdate,id,"updated user avatar successful...!"); 
+        return user;
     } catch (e) {
         console.log(e.message);
         return null;

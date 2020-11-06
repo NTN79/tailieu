@@ -12,6 +12,6 @@ router.post('/logout',authToken,userController.logoutUser);
 router.get('/profile',authToken,userController.getProfile);
 router.patch('/profile',authToken,userController.updateProfile);
 router.delete('/',authToken,userController.deleteUser);
-router.post('/avatar',authToken,userController.uploadFile.single('avatar'),userController.uploadAvatar);
+router.post('/avatar',authToken,userController.uploadAvatar);
 
 module.exports = router;

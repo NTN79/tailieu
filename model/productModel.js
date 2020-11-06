@@ -9,14 +9,18 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
         unique: true
       },
-      trademarkId:{
-          type: Sequelize.INTEGER,
-          allowNull:false
-      },
       code:{
         type: Sequelize.STRING(50),
         allowNull: false,
         unique: true
+      },
+      price:{
+        type: Sequelize.INTEGER,
+        allowNull:false
+      },
+      trademarkId:{
+          type: Sequelize.INTEGER,
+          allowNull:false
       },
       dayAdd:{
           type: Sequelize.DATE,

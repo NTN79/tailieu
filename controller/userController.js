@@ -1,27 +1,16 @@
 const User = require('../Service/user.service');
 const fs = require('fs');
-const multer = require('multer');
+const path = require("path");
 
-let Storage = multer.diskStorage({
-    filename:function(req,file,cb){
-        cb(null,`${req.user.userId}-${file.originalname.replace(' ','').toLocaleUpperCase()}`);
-    },
-    destination: function(req,file,cb){
-        cb(null,'public/img/avatars');
+let fileFilter = (file) => {
+    if (file.mimetype === 'image/png'
+        || file.mimetype === 'image/jpeg'
+        || file.mimetype === 'image/gif'
+        || file.mimetype === 'image/jpg') {
+        return true;
     }
-})
-exports.uploadFile = multer({
-    limits:{
-        fieldSize: 1024*1024*3
-    },
-    fileFilter: function(req, file, cb) {
-       if(file. mimetype ==='image/png'||file. mimetype ==='image/jpeg'||file. mimetype ==='image/gif'||file. mimetype ==='image/jpg')  {
-            cb(null, true);
-        }
-        cb(null, false);
-    },
-    storage: Storage
-});
+    return false;
+}
 
 exports.getAll = async (req, res, next) => {
     try {
@@ -161,14 +150,14 @@ exports.updateProfile = async (req, res, next) => {
 };
 exports.deleteUser = async (req, res, next) => {
     try {
-        let avatarOld =req.user.avatar;
-        if (avatarOld ) {
-                fs.unlink(`./public/img/avatars/${avatarOld}`, (err) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                    console.log("deleted image avatar user...!");
-                });
+        let avatarOld = req.user.avatar;
+        if (avatarOld) {
+            fs.unlink(`./public/img/avatars/${avatarOld}`, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+                console.log("deleted image avatar user...!");
+            });
         }
         let id = req.user.userId;
         let result = await User.delete(id);
@@ -189,38 +178,46 @@ exports.deleteUser = async (req, res, next) => {
 };
 exports.uploadAvatar = async (req, res, next) => {
     try {
-        if(!req.file){
-            throw new Error('avatar upload not an image...!');
+        if (!req.files || Array.isArray(req.files.avatar)) {
+            throw new Error('avatar upload not empty...!');
         }
-        let avatarOld =req.user.avatar;
+        let img = req.files.avatar;
+        if (!fileFilter(img)) {
+            throw new Error('file upload is not image...!')
+        }
+        let avatarOld = req.user.avatar;
         let _id = req.user.userId;
-        let _fileName =`${_id}-${req.file.originalname.replace(' ','').toLocaleUpperCase()}`;
-        if (avatarOld ) {
-            if(avatarOld !=_fileName){
-                fs.unlink(`./public/img/avatars/${avatarOld}`, (err, data) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                    console.log("deleted image avatar old...!");
-                });
-            }
+        let _fileName = `${_id}-${req.user.phone.toString().replace(' ', '').toLocaleUpperCase()}`;
+        if (avatarOld) {
+            fs.unlink(`./public/img/avatars/${avatarOld}`, (err) => {
+                if (err) {
+                    throw new Error(err.message);
+                }
+                console.log("deleted image avatar old...!");
+            });
+
         }
-        let result = await User.updateAvatar(_id,_fileName);
-        if(!result){
+        let _dirSave = path.join(__dirname, `../public/img/avatars/`);
+        await img.mv(`${_dirSave}${_fileName}.jpg`, (err) => {
+            if (err) {
+                throw new Error(err.message);
+            }
+        });
+        let result = await User.updateAvatar(_id, `${_fileName}.jpg`);
+        if (!result) {
             return res.status(400).json({
                 message: "update fail...!",
-                code : 400
+                code: 400
             });
         }
-        let user = await User.findById(req.user.userId);
-        req.user  = user;
+        req.user = result;
         res.status(200).json({
             message: "update successful...!",
             code: 200,
-            data: user
+            data: result
         });
     } catch (e) {
-        console.log("Error: ",e.message);
+        console.log("Error: ", e.message);
         res.status(500).json({
             message: "update Error...!",
             code: 500,

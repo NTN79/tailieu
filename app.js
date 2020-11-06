@@ -8,8 +8,12 @@ const productRouter = require('./router/productRouter');
 require('dotenv').config({path:"./.env"});
 
 const fileUpload = require("express-fileupload");
-app.use(fileUpload());
-
+app.use(fileUpload({
+  limits:{
+    fileSize: 3*1024*1024
+  },
+  preserveExtension:4
+}));
 //connect db
 const dbShop = require('./config/connectDB');
 dbShop.sequelize.sync().then( async()=>{

@@ -3,58 +3,56 @@ const Product = require("../Service/product.service");
 const Trademark = require("../Service/trademark.service");
 const path = require("path");
 const fs = require("fs");
-// const multer = require("multer");
 
-// let Storage = multer.diskStorage({
-//     filename: function (req, file, cb) {
-//         cb(null, `${req.body.name}${file.originalname.replace(' ', '').toLocaleUpperCase()}`);
-//     },
-//     destination: async (req, file, cb) => {
-//         let trademark = await Trademark.findById(req.body.trademarkId);
-//         cb(null, `public/img/products/${trademark.name}`);
-//     }
-// })
-// exports.uploadFile = multer({
-//     limits: {
-//         fieldSize: 1024 * 1024 * 3
-//     },
-//     dest:"public/img/products/",
-//     fileFilter: function (req, file, cb) {
-//         if (file.mimetype === 'image/png'
-//             || file.mimetype === 'image/jpeg'
-//             || file.mimetype === 'image/gif'
-//             || file.mimetype === 'image/jpg') {
-//             cb(null, true);
-//         }
-//         cb(null, false);
-//     }
-// }).array('image', 10);
 
+let fileFilter = (file) => {
+    if (file.mimetype === 'image/png'
+        || file.mimetype === 'image/jpeg'
+        || file.mimetype === 'image/gif'
+        || file.mimetype === 'image/jpg') {
+        return true;
+    }
+    return false;
+}
 exports.createProduct = async (req, res, next) => {
     try {
-        if(!req.files || Object.keys(req.files).length === 0){
+        if (!req.files || Object.keys(req.files).length === 0) {
             throw new Error('fail upload fail..!')
         }
-        //console.log(req.files);
-        //console.log(req.body);
-        let images = req.files.image;
-        _dirSave =path.join(__dirname,"../public/img/products/");
-        images.map(image=>{
-            image.mv(_dirSave+image.name,(err)=>{
-                if(err){
-                    throw new Error('move file error...!');
-                }
-            });
+        let listImg = [];
+        let images = req.files.images;
+        let trademark = await Trademark.findById(req.body.trademarkId);
+        let _dirSave = path.join(__dirname, `../public/img/products/${trademark.name}/`);
+        const productCode = req.body.code;
+        await images.map((image, index) => {
+            //check image is an image
+            if (fileFilter(image)) {
+                let imgName = `${trademark.name}-${productCode}-${index + 1}.jpeg`;
+                image.mv(`${_dirSave}${imgName}`, (err) => {
+                    if (err) {
+                        throw new Error('move file error...!');
+                    }
+                    listImg.push(imgName);
+                    if (index === images.length - 1) {
+                        //req.body.images = listImg;
+                        console.log(listImg);
+                        res.status(200).json({
+                            message: "success...",
+                            data: req.body,
+                            img: listImg
+                        });
+                    }
+                });
+            }
+            else {
+                console.log(`${image.name} is not an image...!`);
+            }
         });
-        res.status(200).json({
-            message: "success...",
-            data: req.body,
-            img: req.files.image
-        });
-        
     } catch (e) {
         res.status(500).json({
-            message: e.message
+            message: "add product Error",
+            code: 500,
+            error:e.message
         })
     }
 };
