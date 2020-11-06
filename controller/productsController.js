@@ -1,9 +1,8 @@
-
 const Product = require("../Service/product.service");
 const Trademark = require("../Service/trademark.service");
+const ImageProduct = require("../Service/imageProduct.service");
 const path = require("path");
 const fs = require("fs");
-
 
 let fileFilter = (file) => {
     if (file.mimetype === 'image/png'
@@ -13,46 +12,60 @@ let fileFilter = (file) => {
         return true;
     }
     return false;
+};
+let SaveImgProduct = async (images, productCode, trademark, callback) => {
+    let _dirSave = path.join(__dirname, `../public/img/products/${trademark.name}/`);
+    const listFile = [];
+    await images.forEach((image, index) => {
+        //check image is an image
+        if (fileFilter(image)) {
+            let imgName = `${trademark.name}-${productCode}-${index + 1}.jpeg`;
+            image.mv(`${_dirSave}${imgName}`, async (err) => {
+                if (err) {
+                    callback('move file error...!', undefined);
+                }
+                listFile.push(imgName);
+                if (index === images.length - 1) {
+                    callback(undefined, listFile);
+                }
+            });
+        }
+        else {
+            console.log(`${image.name} is not an image...!`);
+        }
+    });
 }
+
 exports.createProduct = async (req, res, next) => {
     try {
         if (!req.files || Object.keys(req.files).length === 0) {
             throw new Error('fail upload fail..!')
         }
-        let listImg = [];
         let images = req.files.images;
         let trademark = await Trademark.findById(req.body.trademarkId);
-        let _dirSave = path.join(__dirname, `../public/img/products/${trademark.name}/`);
-        const productCode = req.body.code;
-        await images.map((image, index) => {
-            //check image is an image
-            if (fileFilter(image)) {
-                let imgName = `${trademark.name}-${productCode}-${index + 1}.jpeg`;
-                image.mv(`${_dirSave}${imgName}`, (err) => {
-                    if (err) {
-                        throw new Error('move file error...!');
-                    }
-                    listImg.push(imgName);
-                    if (index === images.length - 1) {
-                        //req.body.images = listImg;
-                        console.log(listImg);
-                        res.status(200).json({
-                            message: "success...",
-                            data: req.body,
-                            img: listImg
-                        });
-                    }
-                });
+        let product = req.body;
+        //let product = await Product.crateProduct(productNew);
+        const productCode = product.code;
+        await SaveImgProduct(images, productCode, trademark, (err, data) => {
+            if (err) {
+                console.log(err);
             }
-            else {
-                console.log(`${image.name} is not an image...!`);
-            }
+            data.forEach(x => {
+                console.log(x);
+            });
+            //console.log(listImg);
+            res.status(200).json({
+                message: "create product successful...!",
+                code: 200,
+                data: product,
+                listImg: data
+            })
         });
     } catch (e) {
         res.status(500).json({
             message: "add product Error",
             code: 500,
-            error:e.message
+            error: e.message
         })
     }
 };

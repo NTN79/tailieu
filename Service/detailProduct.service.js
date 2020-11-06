@@ -10,7 +10,11 @@ exports.create = async (productId , body)=>{
                 quality: body.quality,
                 function: body.function,
                 machine: body.machine,
+                strap: body.strap,
+                waterproof: body.waterproof,
                 size: body.size,
+                thickness:body.thickness,
+                guarantee: body.guarantee,
                 productId: productId,
             });
             let result = await detail.save();
