@@ -69,12 +69,12 @@ exports.update = async (id,body)=>{
         return null;
     }
 };
-exports.delete = async (id)=>{
+exports.delete = async (productId)=>{
     try {
         let result = await detailProduct.destroy({
             force: true,
             where: {
-                id:id
+                productId:productId
             }
         });
         if(!result){

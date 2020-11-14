@@ -178,3 +178,27 @@ exports.deleteTrademark = async (req, res, next) => {
         });
     }
 };
+exports.getAllProducts = async (req,res,next)=>{
+    try {
+        let _id = req.params.id;
+        let result = await Trademark.getProductTrademark(_id);
+        if(!result){
+            return res.status(404).json({
+                message:"not found trademark...!",
+                code : 404
+            });
+        }
+        res.status(200).json({
+            message : "get all product successful...!",
+            code: 200,
+            data:result
+        });
+    } catch (e) {
+        console.log("Error: ",e.message);
+        res.status(500).json({
+            message:" get all product trademark error...!",
+            code:500,
+            error: e.message
+        })
+    }
+};

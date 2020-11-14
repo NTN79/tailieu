@@ -53,7 +53,7 @@ exports.createProduct = async (req, res, next) => {
                 console.log(err);
             }
             for (let i = 0; i < data.length; i++) {
-               await ImageProduct.create(_id,data[i]);
+                await ImageProduct.create(_id, data[i]);
             }
             return res.status(201).json({
                 message: "create product successful...!",
@@ -74,16 +74,53 @@ exports.getProductId = async (req, res, next) => {
     try {
         let _id = req.params.id;
         let product = await Product.findById(_id);
+        if (!product) {
+            return res.status(404).json({
+                message: " not found product",
+                code: 404
+            });
+        }
         res.status(200).json({
             message: "get product successful...!",
-            code:200,
+            code: 200,
             data: product
         });
     } catch (e) {
         res.status(500).json({
             message: "get product Error...!",
-            code:500,
+            code: 500,
             error: e.message
         });
     }
-}
+};
+exports.deleteProduct = async (req, res, next) => {
+    try {
+        let _id = req.params.id;
+        let result = await Product.deleteProductId(_id);
+        if (!result) {
+            throw new Error("can not delete product...! ")
+        }
+        let trademark = result.trademark.dataValues;
+        let _dirDelete = path.join(__dirname, `../public/img/products/${trademark.name}`);
+        result.images.forEach(img => {
+            fs.unlink(`${_dirDelete}/${img.path}`, (err) => {
+                if (err) {
+                    console.log(err.message);
+                }
+            })
+        })
+        console.log('delete one product ', _id);
+        res.status(200).json({
+            message: "delete product successful...!!",
+            code: 200,
+            data: result
+        });
+    } catch (e) {
+        console.log(e.message);
+        res.status(500).json({
+            message: "delete product Error",
+            code: 500,
+            error: e.message
+        })
+    }
+};

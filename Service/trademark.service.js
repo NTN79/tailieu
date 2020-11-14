@@ -91,6 +91,15 @@ exports.updateLogoTrademark = async (id,logoName)=>{
 };
 exports.deleteTrademarkId = async (id)=>{
     try {
+        let products = Trademark.findOne({
+            where :{
+                trademarkId:id
+            },
+            include:["products"]
+        });
+        if(products.products.length>0){
+            throw new Error('trademark can not delete...!')
+        }
         let result = await Trademark.destroy({
             force:true,
             where: {
@@ -104,6 +113,23 @@ exports.deleteTrademarkId = async (id)=>{
         return result;
     } catch (e) {
         console.log("delete trademark Error:",e.message);
+        return null;
+    }
+};
+exports.getProductTrademark = async(id)=>{
+    try {
+        let products = await Trademark.findOne({
+            where :{
+                trademarkId:id
+            },
+            include:["products"]
+        })
+        if(!products){
+            throw new Error('not find trademark...!');
+        }
+        return products;
+    } catch (e) {
+        console.log(e.message);
         return null;
     }
 };
