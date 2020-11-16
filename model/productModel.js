@@ -9,6 +9,9 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
         unique: true
       },
+      gender:{
+        type: Sequelize.STRING(50)
+      },
       code:{
         type: Sequelize.STRING(50),
         allowNull: false,
@@ -17,6 +20,9 @@ module.exports = (sequelize, Sequelize) => {
       price:{
         type: Sequelize.INTEGER,
         allowNull:false
+      },
+      description:{
+        type: Sequelize.STRING,
       },
       trademarkId:{
           type: Sequelize.INTEGER,

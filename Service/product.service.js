@@ -10,8 +10,10 @@ exports.crateProduct = async (body) => {
         let productNew = Products.build({
             productId: _count.count + 1,
             name: body.name,
+            gender:body.gender,
             code: body.code,
             price: body.price,
+            description:body.description,
             trademarkId: body.trademarkId,
             dayAdd: body.dayAdd,
             amount: body.amount
