@@ -28,6 +28,14 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+//ignoreFavicon
+const ignoreFavicon=(req, res, next)=> {
+  if (req.originalUrl.includes('favicon.ico')) {
+    res.status(204).end()
+  }
+  next();
+}
+app.use(ignoreFavicon);
 
 //router api
 app.use('/api/user',userRouter);

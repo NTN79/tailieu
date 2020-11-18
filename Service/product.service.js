@@ -6,6 +6,14 @@ const fs = require("fs");
 
 exports.crateProduct = async (body) => {
     try {
+        let checkProduct = await Products.findOne({
+            where:{
+                code:body.code
+            }
+        });
+        if(checkProduct){
+            throw new Error("already have this product...!");
+        }
         let _count = await Products.findAndCountAll();
         let productNew = Products.build({
             productId: _count.count + 1,
@@ -76,16 +84,4 @@ exports.deleteProductId = async (id) => {
         return null;
     }
 };
-// const deleteProduct = async(product)=>{
-//     await ImageProduct.deleteProduct(product.productId);
-//     await DetailProduct.delete(product.productId);
-//    let result = await Products.destroy({
-//        force : true,
-//        where:{
-//            productId: product.productId
-//        }
-//    });
-//    if(!result){
-//     throw new Error("delete product fail...!");
-//     }
-// };
+

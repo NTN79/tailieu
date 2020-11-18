@@ -22,7 +22,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull:false
       },
       description:{
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(300),
       },
       trademarkId:{
           type: Sequelize.INTEGER,

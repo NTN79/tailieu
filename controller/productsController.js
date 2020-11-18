@@ -46,6 +46,9 @@ exports.createProduct = async (req, res, next) => {
         let trademark = await Trademark.findById(req.body.trademarkId);
         let productNew = req.body;
         let product = await Product.crateProduct(productNew);
+        if(!product){
+            throw new Error("creat new product fail...!");
+        }
         const productCode = product.code;
         const _id = product.productId;
         await SaveImgProduct(images, productCode, trademark, async (err, data) => {
