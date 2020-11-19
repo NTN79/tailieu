@@ -20,6 +20,24 @@ exports.create = async(productId , fileName)=>{
         return null;
     }
 };
+
+exports.getAllImgProducts = async(id)=>{
+    try {
+        let imgList = ImageProduct.findOne({
+            where:{
+                productId:id
+            },
+            raw:true
+        });
+        if(!imgList){
+            throw new Error("img empty...!");
+        }
+        return imgList;
+    } catch (e) {
+        console.log(e.message);
+        return null;
+    }
+};
 exports.delete = async(id)=>{
     try {
         let result = ImageProduct.destroy({

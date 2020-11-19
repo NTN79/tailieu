@@ -13,19 +13,39 @@ let fileFilter = (file) => {
     }
     return false;
 };
+let updateRenameFile = async(listFile)=>{
+    for (let i = 0; i < listFile.length; i++) {
+        let oldName = listFile.name[i];
+    }        
+};
+const updateProduct = async (req,res,next)=>{
+    try {
+        let _id = req.params.id;
+        listImg = await ImageProduct.getAllImgProducts(_id);
+        
+    } catch (e) {
+        console.log("Error: ", e.message);
+        res.status(500).json({
+            mess:"update error...!",
+            code : 500,
+            error: e.message
+        });
+    }
+};
 let SaveImgProduct = async (images, productCode, trademark, callback) => {
-    let _dirSave = path.join(__dirname, `../public/img/products/${trademark.name}/`);
+    let tName = trademark.name.replace(' ', '-');
+    let _dirSave = path.join(__dirname, `../public/img/products/${tName}/`);
     const listFile = [];
     await images.forEach((image, index) => {
         //check image is an image
         if (fileFilter(image)) {
-            let imgName = `${trademark.name}-${productCode}-${index + 1}.jpeg`;
+            let imgName = `${trademark.name.replace(' ', '-')}-${productCode}-${index + 1}.jpeg`;
             image.mv(`${_dirSave}${imgName}`, async (err) => {
                 if (err) {
                     callback('move file error...!', undefined);
                 }
                 listFile.push(imgName);
-                console.log('oke upload', index);
+                console.log('oke upload success', imgName);
                 if (index === images.length - 1) {
                     callback(undefined, listFile);
                 }
@@ -104,7 +124,7 @@ exports.deleteProduct = async (req, res, next) => {
             throw new Error("can not delete product...! ")
         }
         let trademark = result.trademark.dataValues;
-        let _dirDelete = path.join(__dirname, `../public/img/products/${trademark.name}`);
+        let _dirDelete = path.join(__dirname, `../public/img/products/${trademark.name.replace(' ', '-')}`);
         result.images.forEach(img => {
             fs.unlink(`${_dirDelete}/${img.path}`, (err) => {
                 if (err) {
