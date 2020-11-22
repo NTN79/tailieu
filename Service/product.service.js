@@ -4,6 +4,22 @@ const ImageProduct = require("./imageProduct.service");
 const fs = require("fs");
 
 
+exports.getAllProduct = async()=>{
+    try {
+        let result = await Products.findAll({
+            // 
+            attributes:['productId'],
+            order:[['productId','DESC']]
+        });
+        if(!result){
+            throw new Error('get all product fail...!');
+        }
+        return result;
+    } catch (e) {
+        console.log(e.message);
+        return null;
+    }
+};
 exports.crateProduct = async (body) => {
     try {
         let checkProduct = await Products.findOne({

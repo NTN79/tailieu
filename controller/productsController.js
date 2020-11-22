@@ -56,7 +56,29 @@ let SaveImgProduct = async (images, productCode, trademark, callback) => {
         }
     });
 }
-
+exports.getAll = async(req, res, next) => {
+    try {
+        let result = await Product.getAllProduct();
+        if(!result){
+            return res.status(404).json({
+                message:"not found product...!",
+                code :404
+            });
+        } 
+        res.status(200).json({
+            message:"get all product success...!",
+            code :200,
+            data:result
+        });
+    } catch (e) {
+        console.log(e.message);
+        res.status(500).json({
+            message:"get all product Error...!",
+            code :500,
+            error:e.message
+        });
+    }
+};
 exports.createProduct = async (req, res, next) => {
     try {
         if (!req.files || Object.keys(req.files).length === 0) {
