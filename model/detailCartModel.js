@@ -5,7 +5,7 @@ module.exports = (sequelize,Sequelize)=>{
             primaryKey: true
         },
         productId:{
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING(50),
             allowNull: false
         },
         quantity: {

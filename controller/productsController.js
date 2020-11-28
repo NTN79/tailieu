@@ -68,6 +68,7 @@ exports.getAll = async(req, res, next) => {
         res.status(200).json({
             message:"get all product success...!",
             code :200,
+            length: result.length,
             data:result
         });
     } catch (e) {

@@ -2,7 +2,8 @@ module.exports = (sequelize, Sequelize) => {
   const detailProduct = sequelize.define("detailProduct", {
     id: {
       type: Sequelize.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     madeIn: {
       type: Sequelize.STRING(50)
@@ -35,7 +36,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER
     },
     productId: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING(50),
       unique: true,
       allowNull: false
     }

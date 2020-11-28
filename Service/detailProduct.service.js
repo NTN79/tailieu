@@ -2,9 +2,7 @@ const {detailProduct} = require('../config/connectDB');
 
 exports.create = async (productId , body)=>{
     try {
-            let _count = await detailProduct.findAndCountAll({attributes:['id']});
             let detail = detailProduct.build({
-                id: _count.count + 1,
                 madeIn: body.madeIn,
                 color : body.color,
                 quality: body.quality,

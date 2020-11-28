@@ -7,19 +7,28 @@ const fs = require("fs");
 exports.getAllProduct = async()=>{
     try {
         let result = await Products.findAll({
-            // 
-            attributes:['productId'],
-            order:[['productId','DESC']]
+            attributes:['productId','code','name'],
+            include:["detail", "images"],
+            order:[['productId','DESC']],
         });
         if(!result){
             throw new Error('get all product fail...!');
         }
+        // result.forEach(async x => {
+        //     await Products.update({productId:x.code},{
+        //         where:{
+        //             code:x.code,
+        //             productId:x.productId
+        //         }
+        //     })
+        // });
         return result;
     } catch (e) {
         console.log(e.message);
         return null;
     }
 };
+
 exports.crateProduct = async (body) => {
     try {
         let checkProduct = await Products.findOne({
@@ -30,9 +39,8 @@ exports.crateProduct = async (body) => {
         if(checkProduct){
             throw new Error("already have this product...!");
         }
-        let _count = await Products.findAndCountAll();
         let productNew = Products.build({
-            productId: _count.count + 1,
+            productId: body.code,
             name: body.name,
             gender:body.gender,
             code: body.code,

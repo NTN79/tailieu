@@ -17,8 +17,13 @@ exports.getAllUser= async()=>{
 };
 exports.createUser= async (req)=>{
     try {
-        let _countUsers = await Users.findAndCountAll({attributes:['userId']});
-        let _id = _countUsers.count+1;
+        let lastUser = await Users.findAll({
+            attributes:['userId'],
+            order:[['userId','DESC']],
+            limit:1,
+            raw:true
+        }) 
+        let _id = lastUser[0].userId + 1;
         let PasswordHash = await bcrypt.hash(req.body.password,12);
         let user = Users.build({
             userId:_id,

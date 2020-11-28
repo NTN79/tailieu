@@ -5,7 +5,7 @@ module.exports = (sequelize,Sequelize)=>{
             primaryKey: true
         },
         content: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
             allowNull: false
         },
         image: {

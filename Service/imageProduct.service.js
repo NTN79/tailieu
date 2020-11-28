@@ -2,11 +2,7 @@ const {ImageProduct} =require("../config/connectDB");
 
 exports.create = async(productId , fileName)=>{
     try {
-        let _count = await ImageProduct.findAndCountAll({
-            attributes:['id']
-        });
         let imgNew = ImageProduct.build({
-            id:  _count.count +1,
             path: fileName,
             productId: productId
         });
