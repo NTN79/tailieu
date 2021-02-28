@@ -5,16 +5,17 @@ const morgan = require('morgan')
 const userRouter = require('./router/userRouter');
 const trademarkRouter = require('./router/trademarkRouter');
 const productRouter = require('./router/productRouter');
+const path = require('path');
 require('dotenv').config({path:"./.env"});
 
-const fileUpload = require("express-fileupload");
-app.use(fileUpload({
-  limits:{
-    fileSize: 3*1024*1024
-  },
-  preserveExtension:4
-}));
-//connect db
+// const fileUpload = require("express-fileupload");
+// app.use(fileUpload({
+//   limits:{
+//     fileSize: 3*1024*1024
+//   },
+//   preserveExtension:4
+// }));
+// //connect db
 const dbShop = require('./config/connectDB');
 dbShop.sequelize.sync().then( async()=>{
   console.log('db connect...!!');
@@ -37,12 +38,12 @@ const ignoreFavicon=(req, res, next)=> {
 }
 app.use(ignoreFavicon);
 
-//router api
+// router api
 app.use('/api/user',userRouter);
 app.use('/api/trademark',trademarkRouter);
 app.use('/api/product',productRouter)
 
-//handing Error
+
 app.use((req,res,next)=>{
   const error = new Error("page not found...!");
   error.status = 404;

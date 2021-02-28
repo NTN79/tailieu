@@ -174,7 +174,8 @@ exports.deleteTrademark = async (req, res, next) => {
     } catch (e) {
         res.status(500).json({
             message: "Error delete trademark...!",
-            code: 500
+            code: 500,
+            error: e.message
         });
     }
 };

@@ -96,13 +96,13 @@ exports.updateLogoTrademark = async (id,logoName)=>{
 };
 exports.deleteTrademarkId = async (id)=>{
     try {
-        let products = Trademark.findOne({
+        let trademark = await Trademark.findOne({
             where :{
                 trademarkId:id
             },
             include:["products"]
         });
-        if(products.products.length>0){
+        if(trademark.products.length>0){
             throw new Error('trademark can not delete...!')
         }
         let result = await Trademark.destroy({

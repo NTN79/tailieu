@@ -41,7 +41,7 @@ const setRole= async()=>{
   });
 }
 setRole();
-
+//relationship
 databaseShop.Users.belongsTo(databaseShop.Role,{
   foreignKey:"roleId",
   otherKey:"id"

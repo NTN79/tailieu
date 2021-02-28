@@ -14,14 +14,6 @@ exports.getAllProduct = async()=>{
         if(!result){
             throw new Error('get all product fail...!');
         }
-        // result.forEach(async x => {
-        //     await Products.update({productId:x.code},{
-        //         where:{
-        //             code:x.code,
-        //             productId:x.productId
-        //         }
-        //     })
-        // });
         return result;
     } catch (e) {
         console.log(e.message);
@@ -108,4 +100,17 @@ exports.deleteProductId = async (id) => {
         return null;
     }
 };
-
+exports.updateProduct = async(productId,body)=>{
+    try {
+        let product = Products.findOne({
+            where:{
+                productId:productId
+            },
+            limit: 1,
+            
+        })
+    } catch (e) {
+        console.log(e.message);
+        return e.message;
+    }
+}
