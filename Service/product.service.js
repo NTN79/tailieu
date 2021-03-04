@@ -1,8 +1,6 @@
 const { Products } = require('../config/connectDB');
 const DetailProduct = require("./detailProduct.service");
 const ImageProduct = require("./imageProduct.service");
-const fs = require("fs");
-
 
 exports.getAllProduct = async()=>{
     try {
@@ -102,13 +100,35 @@ exports.deleteProductId = async (id) => {
 };
 exports.updateProduct = async(productId,body)=>{
     try {
-        let product = Products.findOne({
+        let product = await Products.findOne({
             where:{
                 productId:productId
             },
             limit: 1,
-            
-        })
+            include: ["trademark", "detail", "images"]
+        });
+        if(!product){
+            throw new Error("Not found product...!");
+        }
+        if(productId != body.code){
+            throw new Error("cann't edit product Id...!");
+        }
+        product.name = body.name;
+        product.gender = body.gender;
+        product.price = body.price;
+        product.description = body.description;
+        product.trademarkId = body.trademarkId;
+        product.dayAdd = body.dayAdd;
+        product.amount = body.amount;
+        let resultUpdateDetail = await DetailProduct.update(productId,body);
+        if(!resultUpdateDetail){
+            throw new Error('update detail fail...!')
+        }
+        let result = await product.save();
+        if(!result){
+            throw new Error('update fail...!')
+        }
+        return product;     
     } catch (e) {
         console.log(e.message);
         return e.message;

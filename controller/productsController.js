@@ -18,20 +18,6 @@ let updateRenameFile = async(listFile)=>{
         let oldName = listFile.name[i];
     }        
 };
-const updateProduct = async (req,res,next)=>{
-    try {
-        let _id = req.params.id;
-        listImg = await ImageProduct.getAllImgProducts(_id);
-        
-    } catch (e) {
-        console.log("Error: ", e.message);
-        res.status(500).json({
-            mess:"update error...!",
-            code : 500,
-            error: e.message
-        });
-    }
-};
 let SaveImgProduct = async (images, productCode, trademark, callback) => {
     let tName = trademark.name.replace(' ', '-');
     let _dirSave = path.join(__dirname, `../public/img/products/${tName}/`);
@@ -168,5 +154,26 @@ exports.deleteProduct = async (req, res, next) => {
             code: 500,
             error: e.message
         })
+    }
+};
+exports.updateProduct = async (req,res,next)=>{
+    try {
+        let _id = req.params.id;
+        const result = await Product.updateProduct(_id,req.body);
+        if(!result){
+            throw new Error(result);
+        }
+        console.log(" updated ",_id);
+        res.status(200).json({
+           message:"update successful...!",
+           data: result
+        })
+    } catch (e) {
+        console.log("Error: ", e.message);
+        res.status(500).json({
+            message:"update error...!",
+            code : 500,
+            error: e.message
+        });
     }
 };

@@ -8,14 +8,14 @@ const productRouter = require('./router/productRouter');
 const path = require('path');
 require('dotenv').config({path:"./.env"});
 
-// const fileUpload = require("express-fileupload");
-// app.use(fileUpload({
-//   limits:{
-//     fileSize: 3*1024*1024
-//   },
-//   preserveExtension:4
-// }));
-// //connect db
+const fileUpload = require("express-fileupload");
+app.use(fileUpload({
+  limits:{
+    fileSize: 3*1024*1024
+  },
+  preserveExtension:4
+}));
+// //connect db 
 const dbShop = require('./config/connectDB');
 dbShop.sequelize.sync().then( async()=>{
   console.log('db connect...!!');
@@ -28,6 +28,16 @@ app.use(morgan('dev'));
 // parse application/json
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+
+app.use(function(req, res, next) {
+  res.header('application/json;charset=UTF-8')
+  res.header('Access-Control-Allow-Credentials', true)
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
+});
+
 
 //ignoreFavicon
 const ignoreFavicon=(req, res, next)=> {

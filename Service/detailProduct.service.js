@@ -41,26 +41,24 @@ exports.findByProductId = async (id)=>{
 };
 exports.update = async (id,body)=>{
     try {
-        let _detailProduct = await detailProduct.update({
-            madeIn: body.madeIn,
-            color : body.color,
-            quality: body.quality,
-            function: body.function,
-            machine: body.machine,
-            size: body.size
-        },{
-            where:{
-                id:id
+        let _detailProduct = await detailProduct.findOne({
+            where :{
+                productId : id
             }
         });
         if(!_detailProduct){
+            throw new Error('not found detail product...!')
+        };
+        _detailProduct.madeIn= body.madeIn;
+        _detailProduct.color= body.color;
+        _detailProduct.quality = body.quality;
+        _detailProduct.function = body.function;
+        _detailProduct.machine = body.machine;
+        _detailProduct.size = body.size;
+        let result = await _detailProduct.save();
+        if(!result){
             throw new Error(`update detail product error...!${id}`);
         };
-        let result = await detailProduct.findOne({
-            where :{
-                id:id
-            }
-        });
         return result 
     } catch (e) {
         console.log("Error:",e.message);
