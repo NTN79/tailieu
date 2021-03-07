@@ -1,6 +1,7 @@
 const Trademark = require('../Service/trademark.service');
 const fs = require('fs');
 const path = require("path");
+const cloudinary = require('../config/cloudinary.connect');
 
 let fileFilter = (file) => {
     if (file.mimetype === 'image/png'
@@ -10,6 +11,9 @@ let fileFilter = (file) => {
         return true;
     }
     return false;
+}
+let uploadImage = ()=>{
+    
 }
 
 exports.createTrademark = async (req, res, next) => {
@@ -118,23 +122,25 @@ exports.updateLogo = async (req, res, next) => {
         if(!fileFilter(img)){
             throw new Error('file upload is not image...!')
         }
-        let _dirSave = path.join(__dirname, `../public/img/logo/`);
-        let _id = req.params.id;
-        let trademark = await Trademark.findById(_id);
-        let fileName = `trademark-${_id}-${trademark.name.replace(' ', '')}`.toLocaleUpperCase();
-        await img.mv(`${_dirSave}${fileName}.jpg`,(err)=>{
-            if(err){
-                throw new Error(err.message);
-            }
-        });
-        let result = await Trademark.updateLogoTrademark(_id,`${fileName}.jpg`);
-        if (!result) {
-            return res.status(400).json({
-                message: "logo upload fail...!",
-                code: 400
-            });
-        }
-        console.log(result.name,' trademark updated...!');
+        // console.log(img.data.toString());
+        // let _dirSave = path.join(__dirname, `../public/img/logo/`);
+        // let _id = req.params.id;
+        // let trademark = await Trademark.findById(_id);
+        // let fileName = `trademark-${_id}-${trademark.name.replace(' ', '')}`.toLocaleUpperCase();
+        // await img.mv(`${_dirSave}${fileName}.jpg`,(err)=>{
+        //     if(err){
+        //         throw new Error(err.message);
+        //     }
+        // });
+        // let result = await Trademark.updateLogoTrademark(_id,`${fileName}.jpg`);
+        // if (!result) {
+        //     return res.status(400).json({
+        //         message: "logo upload fail...!",
+        //         code: 400
+        //     });
+        // }
+        const result =  cloudinary.uploader.upload(img.tempFilePath);
+        // console.log(img,' trademark updated...!');
         res.status(200).json({
             message: "success...!",
             code: 200,
