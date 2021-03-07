@@ -6,10 +6,12 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true
       },
       path: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull:false
       },
       productId:{
-          type: Sequelize.INTEGER
+        type: Sequelize.STRING(50),
+        allowNull:false
       }
     },{
       freezeTableName: true

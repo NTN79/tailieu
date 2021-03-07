@@ -1,17 +1,21 @@
+const imageProductModel = require("./imageProductModel");
+
 module.exports = (sequelize, Sequelize) => {
     const Trademark = sequelize.define("trademark", {
-      id: {
+      trademarkId: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+        primaryKey: true
       },
       name: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(50),
         unique:true,
         allowNull:false
       },
        description:{
-          type:Sequelize.STRING
+        type:Sequelize.TEXT
+      },
+      image:{
+        type: Sequelize.STRING(60)
       }
     },{
       freezeTableName: true

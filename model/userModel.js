@@ -1,17 +1,17 @@
 module.exports = (sequelize,Sequelize)=>{
     const User = sequelize.define("users",{    
-        id:{
+        userId:{
             type:Sequelize.INTEGER,
             primaryKey:true,
             autoIncrement: true
         },
         fistName:{
-            type:Sequelize.STRING,
+            type:Sequelize.STRING(200),
             allowNull: false,
             length: '200'
         },
         lastName:{
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(200),
             allowNull: false,
             length: '200'
         },
@@ -25,32 +25,33 @@ module.exports = (sequelize,Sequelize)=>{
             unique:true
         },
         gender: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(10),
             defaultValue:'nam',
             length: '10'
         },
         address:{
-            type:Sequelize.STRING,
+            type:Sequelize.STRING(200),
             allowNull:false,
             length: '100'
         },
         email:{
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(50),
             allowNull: false,
             unique:true,
             length: '50'
         },
         password:{
-            type:Sequelize.STRING,
+            type:Sequelize.STRING(100),
             allowNull: false,
             length: '50'
         },
         roleId:{
             type: Sequelize.INTEGER,
-            allowNull:false
+            allowNull:false,
+            defaultValue:2
         },
         avatar:{
-            type:Sequelize.STRING
+            type:Sequelize.STRING(50)
         }
     },{
         freezeTableName: true
