@@ -51,7 +51,6 @@ const ignoreFavicon=(req, res, next)=> {
 app.use(ignoreFavicon);
 
 // router api
-
 app.use('/api/user',userRouter);
 app.use('/api/trademark',trademarkRouter);
 app.use('/api/product',productRouter)
@@ -66,7 +65,9 @@ app.use((error,req,res,next)=>{
   console.log(error)
   res.status(error.status||500);
   res.json({
-    message:"Hoang ky project shop...!",
+    message:"ABCShop project shop...!",
+    member1:"Vo Hoang ky-DH51704991",
+    member2:"Nguyen Trong Nghia-DH5700968",
     error: error.message
   });
 });
