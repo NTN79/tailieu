@@ -78,17 +78,10 @@ exports.updateLogoTrademark = async (id,logoName)=>{
                 trademarkId: id
             }
         });
-        console.log(result);
         if(!result){
             throw new Error("update logo fail...!");
         }
-        let trademark = await Trademark.findOne({
-            where:{
-                trademarkId: id
-            },
-            raw:true
-        });
-        return trademark;
+        return result;
     } catch (e) {
         console.log("update Logo trademark Error:",e.message);
         return null; 
@@ -115,7 +108,7 @@ exports.deleteTrademarkId = async (id)=>{
             throw new Error("not fond trademark delete...!");
         }
         console.log("delete a trademark...!")
-        return result;
+        return trademark;
     } catch (e) {
         console.log("delete trademark Error:",e.message);
         return null;

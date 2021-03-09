@@ -9,6 +9,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 dotenv.config();
 
+//option upload file
 const fileUpload = require("express-fileupload");
 app.use(fileUpload({
   limits:{
@@ -17,6 +18,7 @@ app.use(fileUpload({
   useTempFiles:true,
   preserveExtension:4
 }));
+
 //connect db 
 const dbShop = require('./config/connectDB');
 dbShop.sequelize.sync().then( async()=>{

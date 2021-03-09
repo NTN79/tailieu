@@ -12,9 +12,7 @@ let fileFilter = (file) => {
     }
     return false;
 }
-let uploadImage = ()=>{
-    
-}
+
 
 exports.createTrademark = async (req, res, next) => {
     try {
@@ -30,7 +28,8 @@ exports.createTrademark = async (req, res, next) => {
             message: 'create successful...!!',
             code: 201,
             data: trademark
-        })
+        });
+        next();
     } catch (e) {
         res.status(500).json({
             message: 'create trademark Error...!',
@@ -52,7 +51,8 @@ exports.getAllTrademark = async (req, res, next) => {
             message: "get all successful...!",
             code: 200,
             data: trademark
-        })
+        });
+        next();
     } catch (e) {
         res.status(500).json({
             message: "get all successful...!",
@@ -70,6 +70,16 @@ exports.getTrademarkId = async (req, res, next) => {
                 message: `not found trademark`,
                 code: 404
             });
+        }
+        if(trademark.image != null){
+            let url_img = await cloudinary.url(`logo/${trademark.image}`,{
+                
+                transformation:{
+                    width:160,
+                    height:60
+                }
+            });
+            trademark.image = url_img;
         }
         res.status(200).json({
             message: "get successful...!",
@@ -115,36 +125,41 @@ exports.updateTrademarkId = async (req, res, next) => {
 };
 exports.updateLogo = async (req, res, next) => {
     try {
-        if (!req.files || Array.isArray(req.files.logo)) {
+        if (!req.files || Array.isArray(req.files
+            .logo)) {
             throw new Error(" image upload not empty...!");
         }
         let img = req.files.logo;
         if(!fileFilter(img)){
             throw new Error('file upload is not image...!')
         }
-        // console.log(img.data.toString());
-        // let _dirSave = path.join(__dirname, `../public/img/logo/`);
-        // let _id = req.params.id;
-        // let trademark = await Trademark.findById(_id);
-        // let fileName = `trademark-${_id}-${trademark.name.replace(' ', '')}`.toLocaleUpperCase();
+        let _dirSave = "logo/"; //path.join(__dirname, `../public/img/logo/`);
+        let _id = req.params.id;
+        let trademark = await Trademark.findById(_id);
+        if(trademark==null){
+            throw new Error("not found trademark...!")
+        }
+        let fileName = `trademark-${_id}-${trademark.name.replace(' ', '')}`.toLocaleUpperCase();
+        await cloudinary.uploader.upload(img.tempFilePath,{
+            folder:_dirSave,
+            public_id:fileName,
+            unique_filename:true
+        });
         // await img.mv(`${_dirSave}${fileName}.jpg`,(err)=>{
         //     if(err){
         //         throw new Error(err.message);
         //     }
         // });
-        // let result = await Trademark.updateLogoTrademark(_id,`${fileName}.jpg`);
-        // if (!result) {
-        //     return res.status(400).json({
-        //         message: "logo upload fail...!",
-        //         code: 400
-        //     });
-        // }
-        const result =  cloudinary.uploader.upload(img.tempFilePath);
-        // console.log(img,' trademark updated...!');
+        let result = await Trademark.updateLogoTrademark(_id,fileName);
+        if (!result) {
+            return res.status(400).json({
+                message: "logo upload fail...!",
+                code: 400
+            });
+        }
         res.status(200).json({
-            message: "success...!",
-            code: 200,
-            data: result
+            message: "upload logo success...!",
+            code: 200
         });
     } catch (e) {
         console.log("Error: ", e.message);
@@ -158,7 +173,6 @@ exports.updateLogo = async (req, res, next) => {
 exports.deleteTrademark = async (req, res, next) => {
     try {
         let _id = req.params.id;
-        let trademark = await Trademark.findById(_id);
         let result = await Trademark.deleteTrademarkId(_id);
         if (!result) {
             return res.status(400).json({
@@ -166,12 +180,15 @@ exports.deleteTrademark = async (req, res, next) => {
                 code: 400
             });
         }
-        if (trademark.image) {
-            fs.unlink(`./public/img/logo/${trademark.image}`, (err) => {
-                if (err) {
-                    console.log(err.message);
-                }
-            });
+        if (result.image !=null) {
+            await cloudinary.uploader.destroy(`logo/${result.image}`,{
+                resource_type:"image"
+            })
+            // fs.unlink(`./public/img/logo/${trademark.image}`, (err) => {
+            //     if (err) {
+            //         console.log(err.message);
+            //     }
+            // });
         }
         res.status(200).json({
             message: "delate trademark successful...!",
