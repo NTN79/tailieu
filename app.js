@@ -51,12 +51,7 @@ const ignoreFavicon=(req, res, next)=> {
 app.use(ignoreFavicon);
 
 // router api
-app.use('/',(req,res,next)=>{
-  res.status(200).json({
-    message:"Hoang ky project shop...!",
-    status:200
-  });
-});
+
 app.use('/api/user',userRouter);
 app.use('/api/trademark',trademarkRouter);
 app.use('/api/product',productRouter)
@@ -71,6 +66,7 @@ app.use((error,req,res,next)=>{
   console.log(error)
   res.status(error.status||500);
   res.json({
+    message:"Hoang ky project shop...!",
     error: error.message
   });
 });
