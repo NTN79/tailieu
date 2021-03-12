@@ -80,7 +80,6 @@ exports.deleteProductId = async (id) => {
         if (!product) {
             throw new Error("not found product...!");
         }
-        // await deleteProduct(product);
         await ImageProduct.deleteProduct(product.productId);
         await DetailProduct.delete(product.productId);
         let result = await Products.destroy({
