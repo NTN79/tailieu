@@ -1,6 +1,5 @@
 const User = require('../Service/user.service');
-const fs = require('fs');
-const path = require("path");
+const cloundinary = require('../config/cloudinary.connect');
 
 let fileFilter = (file) => {
     if (file.mimetype === 'image/png'
@@ -151,17 +150,18 @@ exports.updateProfile = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
     try {
         let avatarOld = req.user.avatar;
-        if (avatarOld) {
-            fs.unlink(`./public/img/avatars/${avatarOld}`, (err) => {
-                if (err) {
-                    console.log(err);
-                }
-                console.log("deleted image avatar user...!");
-            });
-        }
         let id = req.user.userId;
         let result = await User.delete(id);
         if (!result) { throw new Error('Error delete...!'); }
+        if (avatarOld) {
+            // fs.unlink(`./public/img/avatars/${avatarOld}`, (err) => {
+            //     if (err) {
+            //         console.log(err);
+            //     }
+            //     console.log("deleted image avatar user...!");
+            // });
+            await cloundinary.uploader.destroy(req.user.avatar);
+        }
         req.user = undefined;
         req.token = undefined;
         res.status(200).json({
@@ -187,23 +187,32 @@ exports.uploadAvatar = async (req, res, next) => {
         }
         let avatarOld = req.user.avatar;
         let _id = req.user.userId;
-        let _fileName = `${_id}-${req.user.phone.toString().replace(' ', '').toLocaleUpperCase()}`;
+        let _fileName = `${_id}-${req.user.lastName.replace(' ', '').toLocaleUpperCase()}`;
         if (avatarOld) {
-            fs.unlink(`./public/img/avatars/${avatarOld}`, (err) => {
-                if (err) {
-                    throw new Error(err.message);
-                }
-                console.log("deleted image avatar old...!");
-            });
+            // fs.unlink(`./public/img/avatars/${avatarOld}`, (err) => {
+            //     if (err) {
+            //         throw new Error(err.message);
+            //     }
+            //     console.log("deleted image avatar old...!");
+            // });
+            await cloundinary.uploader.destroy(req.user.avatar);
 
         }
-        let _dirSave = path.join(__dirname, `../public/img/avatars/`);
-        await img.mv(`${_dirSave}${_fileName}.jpg`, (err) => {
-            if (err) {
-                throw new Error(err.message);
-            }
-        });
-        let result = await User.updateAvatar(_id, `${_fileName}.jpg`);
+        let _dirSave = "avatar/";//path.join(__dirname, `../public/img/avatars/`);
+        // await img.mv(`${_dirSave}${_fileName}.jpg`, (err) => {
+        //     if (err) {
+        //         throw new Error(err.message);
+        //     }
+        // });
+        const resultUpload = await cloundinary.uploader.upload(img.tempFilePath,{
+            folder:_dirSave,
+            public_id:_fileName,
+            unique_filename:true
+        })
+        if(!resultUpload){
+            throw new Error('image upload fail...!');
+        }
+        let result = await User.updateAvatar(_id, `${_fileName}`);
         if (!result) {
             return res.status(400).json({
                 message: "update fail...!",

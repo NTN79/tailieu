@@ -1,8 +1,7 @@
 const Product = require("../Service/product.service");
 const Trademark = require("../Service/trademark.service");
 const ImageProduct = require("../Service/imageProduct.service");
-const path = require("path");
-const fs = require("fs");
+const cloudinary = require('../config/cloudinary.connect');
 
 let fileFilter = (file) => {
     if (file.mimetype === 'image/png'
@@ -13,35 +12,7 @@ let fileFilter = (file) => {
     }
     return false;
 };
-let updateRenameFile = async(listFile)=>{
-    for (let i = 0; i < listFile.length; i++) {
-        let oldName = listFile.name[i];
-    }        
-};
-let SaveImgProduct = async (images, productCode, trademark, callback) => {
-    let tName = trademark.name.replace(' ', '-');
-    let _dirSave = path.join(__dirname, `../public/img/products/${tName}/`);
-    const listFile = [];
-    await images.forEach((image, index) => {
-        //check image is an image
-        if (fileFilter(image)) {
-            let imgName = `${trademark.name.replace(' ', '-')}-${productCode}-${index + 1}.jpeg`;
-            image.mv(`${_dirSave}${imgName}`, async (err) => {
-                if (err) {
-                    callback('move file error...!', undefined);
-                }
-                listFile.push(imgName);
-                console.log('oke upload success', imgName);
-                if (index === images.length - 1) {
-                    callback(undefined, listFile);
-                }
-            });
-        }
-        else {
-            console.log(`${image.name} is not an image...!`);
-        }
-    });
-}
+
 exports.getAll = async(req, res, next) => {
     try {
         let result = await Product.getAllProduct();
@@ -75,24 +46,36 @@ exports.createProduct = async (req, res, next) => {
         let trademark = await Trademark.findById(req.body.trademarkId);
         let productNew = req.body;
         let product = await Product.crateProduct(productNew);
+        console.log(product);
         if(!product){
             throw new Error("creat new product fail...!");
         }
-        const productCode = product.code;
         const _id = product.productId;
-        await SaveImgProduct(images, productCode, trademark, async (err, data) => {
-            if (err) {
-                console.log(err);
+        // await SaveImgProduct(images, productCode, trademark)
+        let tName = trademark.name.replace(' ', '-');
+        let _dirSave = "products/";//path.join(__dirname, `../public/img/products/${tName}/`);
+        let d= new Date();
+        await images.map((image,index) => {
+        //check image is an image
+            if (fileFilter(image)) {
+                let imgName = `${tName}-${_id}-${d.getTime()+index}`;
+                cloudinary.uploader.upload(image.tempFilePath,{
+                    folder:_dirSave,
+                    public_id:imgName,
+                    unique_filename:true
+                },async (err)=>{
+                    if(err){console.log(err);}
+                    else{
+                       await ImageProduct.create(_id,imgName);
+                    }
+                })
+            }else {
+                console.log(`${image.name} is not an image...!`);
             }
-            for (let i = 0; i < data.length; i++) {
-                await ImageProduct.create(_id, data[i]);
-            }
-            return res.status(201).json({
-                message: "create product successful...!",
-                code: 200,
-                data: product,
-                listImg: data
-            })
+        });
+        res.status(200).json({
+            message: "add product success...!",
+            code: 200,
         });
     } catch (e) {
         res.status(500).json({
@@ -133,15 +116,15 @@ exports.deleteProduct = async (req, res, next) => {
             throw new Error("can not delete product...! ")
         }
         let trademark = result.trademark.dataValues;
-        let _dirDelete = path.join(__dirname, `../public/img/products/${trademark.name.replace(' ', '-')}`);
-        result.images.forEach(img => {
-            fs.unlink(`${_dirDelete}/${img.path}`, (err) => {
-                if (err) {
-                    console.log(err.message);
-                }
+        // console.log(result);
+        result.images.map(img => {
+            cloudinary.uploader.destroy(`products/${img.path}`,{
+                resource_type:"image"
+            },(err)=>{
+                if(err) console.log(err);
             })
         })
-        console.log('delete one product ', _id);
+        console.log('delete one product ', result.name);
         res.status(200).json({
             message: "delete product successful...!!",
             code: 200,

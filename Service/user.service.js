@@ -17,17 +17,8 @@ exports.getAllUser= async()=>{
 };
 exports.createUser= async (req)=>{
     try {
-        // let lastUser = await Users.findAll({
-        //     attributes:['userId'],
-        //     order:[['userId','DESC']],
-        //     limit:1,
-        //     raw:true
-        // }) 
-        let t= new Date();
-        let _id = t.getTime-15000000000;
         let PasswordHash = await bcrypt.hash(req.body.password,12);
         let user = Users.build({
-            userId:_id,
             fistName: req.body.fistName,
             lastName: req.body.lastName,
             birthday: req.body.birthday,
@@ -51,7 +42,7 @@ exports.updateUserProfile = async(id,user)=>{
             where:{ userId:id }
         });
         if(!userUpdate){ throw new Error('user update fail...!')}
-        console.log(userUpdate,"updated an user successful...!");
+        console.log(userUpdate,"updated user successful...!");
         return userUpdate;
     } catch (e) {
         console.log(e.message);

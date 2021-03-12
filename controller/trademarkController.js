@@ -1,6 +1,6 @@
 const Trademark = require('../Service/trademark.service');
-const fs = require('fs');
-const path = require("path");
+// const fs = require('fs');
+// const path = require("path");
 const cloudinary = require('../config/cloudinary.connect');
 
 let fileFilter = (file) => {
@@ -133,23 +133,21 @@ exports.updateLogo = async (req, res, next) => {
         if(!fileFilter(img)){
             throw new Error('file upload is not image...!')
         }
-        let _dirSave = "logo/"; //path.join(__dirname, `../public/img/logo/`);
+        const _dirSave = "logo/"; //path.join(__dirname, `../public/img/logo/`);
         let _id = req.params.id;
         let trademark = await Trademark.findById(_id);
         if(trademark==null){
             throw new Error("not found trademark...!")
         }
-        let fileName = `trademark-${_id}-${trademark.name.replace(' ', '')}`.toLocaleUpperCase();
-        await cloudinary.uploader.upload(img.tempFilePath,{
+        const fileName = `trademark-${_id}-${trademark.name.replace(' ', '')}`.toLocaleUpperCase();
+        let resultUpload =await cloudinary.uploader.upload(img.tempFilePath,{
             folder:_dirSave,
             public_id:fileName,
             unique_filename:true
         });
-        // await img.mv(`${_dirSave}${fileName}.jpg`,(err)=>{
-        //     if(err){
-        //         throw new Error(err.message);
-        //     }
-        // });
+        if(!resultUpload){
+            throw new Error('image upload fail...!');
+        }
         let result = await Trademark.updateLogoTrademark(_id,fileName);
         if (!result) {
             return res.status(400).json({
@@ -184,11 +182,6 @@ exports.deleteTrademark = async (req, res, next) => {
             await cloudinary.uploader.destroy(`logo/${result.image}`,{
                 resource_type:"image"
             })
-            // fs.unlink(`./public/img/logo/${trademark.image}`, (err) => {
-            //     if (err) {
-            //         console.log(err.message);
-            //     }
-            // });
         }
         res.status(200).json({
             message: "delate trademark successful...!",
