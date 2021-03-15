@@ -75,7 +75,7 @@ app.use((error,req,res,next)=>{
 });
 
 //app listen port
-const port = 8080 ||process.env.PORT ;
+const port = process.env.PORT|| 8080 ;
 app.listen(port,()=>{
     console.log(`app listen port: " ${port} "`);
 })  
