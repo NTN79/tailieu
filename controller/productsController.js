@@ -51,7 +51,6 @@ exports.createProduct = async (req, res, next) => {
             throw new Error("creat new product fail...!");
         }
         const _id = product.productId;
-        // await SaveImgProduct(images, productCode, trademark)
         let tName = trademark.name.replace(' ', '-');
         let _dirSave = "products/";//path.join(__dirname, `../public/img/products/${tName}/`);
         let d= new Date();

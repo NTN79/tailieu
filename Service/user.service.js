@@ -21,13 +21,13 @@ exports.createUser= async (req)=>{
         let user = Users.build({
             fistName: req.body.fistName,
             lastName: req.body.lastName,
-            birthday: req.body.birthday,
+            birthday: (req.body.birthday)?req.body.birthday:"1/1/2000",
             phone: req.body.phone,
             gender: (req.body.gender)?req.body.gender:"nam",
-            address: req.body.address,
+            address: (req.body.address)?req.body.address:"",
             email: req.body.email,
             password: PasswordHash,
-            roleId: (req.body.role)?req.body.role: 2,
+            roleId: (req.body.role)?req.body.role:2,
         });
         const result =await user.save();
         return result;

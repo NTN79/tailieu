@@ -154,12 +154,6 @@ exports.deleteUser = async (req, res, next) => {
         let result = await User.delete(id);
         if (!result) { throw new Error('Error delete...!'); }
         if (avatarOld) {
-            // fs.unlink(`./public/img/avatars/${avatarOld}`, (err) => {
-            //     if (err) {
-            //         console.log(err);
-            //     }
-            //     console.log("deleted image avatar user...!");
-            // });
             await cloundinary.uploader.destroy(req.user.avatar);
         }
         req.user = undefined;
@@ -189,21 +183,9 @@ exports.uploadAvatar = async (req, res, next) => {
         let _id = req.user.userId;
         let _fileName = `${_id}-${req.user.lastName.replace(' ', '').toLocaleUpperCase()}`;
         if (avatarOld) {
-            // fs.unlink(`./public/img/avatars/${avatarOld}`, (err) => {
-            //     if (err) {
-            //         throw new Error(err.message);
-            //     }
-            //     console.log("deleted image avatar old...!");
-            // });
             await cloundinary.uploader.destroy(req.user.avatar);
-
         }
-        let _dirSave = "avatar/";//path.join(__dirname, `../public/img/avatars/`);
-        // await img.mv(`${_dirSave}${_fileName}.jpg`, (err) => {
-        //     if (err) {
-        //         throw new Error(err.message);
-        //     }
-        // });
+        let _dirSave = "avatar/";
         const resultUpload = await cloundinary.uploader.upload(img.tempFilePath,{
             folder:_dirSave,
             public_id:_fileName,
