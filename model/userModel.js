@@ -26,13 +26,20 @@ module.exports = (sequelize,Sequelize)=>{
         },
         gender: {
             type: Sequelize.STRING(10),
-            defaultValue:'nam',
+            defaultValue:'Nam',
             length: '10'
         },
-        address:{
+        province:{//tỉnh
             type:Sequelize.STRING(200),
-            allowNull:false,
-            length: '100'
+            allowNull:true
+        },
+        district:{//huyện
+            type:Sequelize.STRING(200),
+            allowNull:true
+        },
+        address:{// địa chỉ chi tiết
+            type:Sequelize.STRING(200),
+            allowNull:true
         },
         email:{
             type: Sequelize.STRING(50),

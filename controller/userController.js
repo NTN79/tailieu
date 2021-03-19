@@ -1,5 +1,7 @@
 const User = require('../Service/user.service');
 const cloundinary = require('../config/cloudinary.connect');
+const bcrypt = require('bcrypt');
+
 
 let fileFilter = (file) => {
     if (file.mimetype === 'image/png'
@@ -40,6 +42,9 @@ exports.getProfile = async (req, res, next) => {
                 message: 'Not fond user...!',
                 code: 404
             });
+        }
+        if(user.avatar){
+            user.avatar = cloundinary.url(`avatar/${user.avatar}`,{ format:'jpg'});
         }
         res.status(200).json({
             message: 'successful...!',
@@ -124,6 +129,7 @@ exports.updateProfile = async (req, res, next) => {
                 throw new Error('input wrong...!');
             }
         });
+        // console.log(req.body);
         let _id = req.user.userId;
         let result = await User.updateUserProfile(_id, req.body);
         if (!result) {
@@ -132,12 +138,15 @@ exports.updateProfile = async (req, res, next) => {
                 code: 400
             });
         }
-        let user = await User.findById(req.user.userId);
+        let user = await User.findById(_id);
         req.user = user;
+        let token = await User.generateAuthToken(user);
+        req.token=token;
         res.status(200).json({
             message: "update successful...!",
             code: 200,
-            data: user
+            data: user,
+            token:token
         });
     } catch (e) {
         res.status(500).json({
@@ -154,7 +163,7 @@ exports.deleteUser = async (req, res, next) => {
         let result = await User.delete(id);
         if (!result) { throw new Error('Error delete...!'); }
         if (avatarOld) {
-            await cloundinary.uploader.destroy(req.user.avatar);
+            await cloundinary.uploader.destroy(`avatar/${req.user.avatar}`);
         }
         req.user = undefined;
         req.token = undefined;
@@ -181,20 +190,21 @@ exports.uploadAvatar = async (req, res, next) => {
         }
         let avatarOld = req.user.avatar;
         let _id = req.user.userId;
-        let _fileName = `${_id}-${req.user.lastName.replace(' ', '').toLocaleUpperCase()}`;
-        if (avatarOld) {
-            await cloundinary.uploader.destroy(req.user.avatar);
-        }
+        let _fileName = `${_id}-${req.user.phone}`;
         let _dirSave = "avatar/";
+        if (avatarOld) {
+            await cloundinary.uploader.destroy(`${_dirSave}${req.user.avatar}`);
+        }
         const resultUpload = await cloundinary.uploader.upload(img.tempFilePath,{
             folder:_dirSave,
             public_id:_fileName,
-            unique_filename:true
+            unique_filename:true,
+            format:"jpg"
         })
         if(!resultUpload){
             throw new Error('image upload fail...!');
         }
-        let result = await User.updateAvatar(_id, `${_fileName}`);
+        let result = await User.updateAvatar(_id, _fileName);
         if (!result) {
             return res.status(400).json({
                 message: "update fail...!",
@@ -216,3 +226,39 @@ exports.uploadAvatar = async (req, res, next) => {
         });
     }
 };
+exports.updatePassword = async (req, res, next)=>{
+    try {
+        let newPass = req.body.newPass;
+        let oldPass = req.body.oldPass;
+        let _id = req.user.userId;
+        let email = req.user.email;
+        const checkLogin = await User.findByUser({email:email,password:oldPass});
+        if(!checkLogin){
+            throw new Error("password input wrong...!");
+        }
+        let PasswordHash = await bcrypt.hash(newPass,12);
+        const result = await User.updateUserProfile(_id,{
+            password: PasswordHash
+        });
+        if(!result){
+            return res.status(400).json({
+                message: "update fail...!",
+                code: 400
+            });
+        }
+        req.user = undefined;
+        req.token = undefined;
+        req.headers.authorization = undefined;
+        res.status(200).json({
+            message: 'update success. please login again...!',
+            code: 200,
+        });
+    } catch (e) {
+        console.log("Error: ", e.message);
+        res.status(500).json({
+            message: "update Error...!",
+            code: 500,
+            error: e.message
+        });
+    }
+}

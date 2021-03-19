@@ -24,6 +24,8 @@ exports.createUser= async (req)=>{
             birthday: (req.body.birthday)?req.body.birthday:"1/1/2000",
             phone: req.body.phone,
             gender: (req.body.gender)?req.body.gender:"nam",
+            province: (req.body.province)?req.body.province:"",
+            district:(req.body.district)?req.body.province:"",
             address: (req.body.address)?req.body.address:"",
             email: req.body.email,
             password: PasswordHash,
@@ -88,7 +90,7 @@ exports.delete = async(id)=>{
 exports.findById= async(id)=>{
     try {
         let user = await Users.findOne({
-            attributes:['userId','fistName', 'lastName', 'birthday', 'phone', 'gender', 'address', 'email','avatar'],
+            attributes:['userId','fistName', 'lastName', 'birthday', 'phone', 'gender','province','district','address', 'email','avatar'],
             where:{
                 userId:id
             }

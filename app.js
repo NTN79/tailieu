@@ -5,7 +5,8 @@ const morgan = require('morgan')
 const userRouter = require('./router/userRouter');
 const trademarkRouter = require('./router/trademarkRouter');
 const productRouter = require('./router/productRouter');
-const path = require('path');
+const cartRouter = require("./router/ListCartRouter");
+const cors = require('cors');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -33,10 +34,10 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-
+app.use(cors());
 app.use(function(req, res, next) {
   res.header('application/json;charset=UTF-8')
-  res.header('Access-Control-Allow-Credentials', true)
+  res.header('Access-Control-Allow-Credentials', "true")
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
@@ -55,7 +56,8 @@ app.use(ignoreFavicon);
 // router api
 app.use('/api/user',userRouter);
 app.use('/api/trademark',trademarkRouter);
-app.use('/api/product',productRouter)
+app.use('/api/product',productRouter);
+app.use('/api/cart',cartRouter);
 
 
 app.use((req,res,next)=>{

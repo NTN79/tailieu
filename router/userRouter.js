@@ -13,5 +13,7 @@ router.get('/profile',authToken,userController.getProfile);
 router.patch('/profile',authToken,userController.updateProfile);
 router.delete('/',authToken,userController.deleteUser);
 router.post('/avatar',authToken,userController.uploadAvatar);
+router.put('/password',authToken,userController.updatePassword);
+
 
 module.exports = router;
