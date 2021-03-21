@@ -21,7 +21,18 @@ exports.getAll = async(req, res, next) => {
                 message:"not found product...!",
                 code :404
             });
-        } 
+        }
+        const trademarks =[];
+        let trademark = await Trademark.getAllTrademark();
+        trademark.map(x=>{
+            trademarks.push(x.name);
+        })
+        console.log(trademarks);
+        for(i=0;i<result.length;i++){
+            result[i].images.map(x=>{
+                x.path= cloudinary.url(`products/${trademarks[result[i].trademarkId-1].replace(' ', '-')}/${x.path}`,{ format:'jpg'});
+            });
+        }
         res.status(200).json({
             message:"get all product success...!",
             code :200,
@@ -52,7 +63,7 @@ exports.createProduct = async (req, res, next) => {
         }
         const _id = product.productId;
         let tName = trademark.name.replace(' ', '-');
-        let _dirSave = "products/";//path.join(__dirname, `../public/img/products/${tName}/`);
+        let _dirSave = `products/${tName}`;//path.join(__dirname, `../public/img/products/${tName}/`);
         let d= new Date();
         await images.map((image,index) => {
         //check image is an image
@@ -94,6 +105,9 @@ exports.getProductId = async (req, res, next) => {
                 code: 404
             });
         }
+        product.images.map(x=>{
+            x.path= cloudinary.url(`products/${product.trademark.name.replace(' ', '-')}/${x.path}`,{ format:'jpg'});
+        });
         res.status(200).json({
             message: "get product successful...!",
             code: 200,
@@ -114,10 +128,10 @@ exports.deleteProduct = async (req, res, next) => {
         if (!result) {
             throw new Error("can not delete product...! ")
         }
-        let trademark = result.trademark.dataValues;
+        // let trademark = result.trademark.dataValues;
         // console.log(result);
         result.images.map(img => {
-            cloudinary.uploader.destroy(`products/${img.path}`,{
+            cloudinary.uploader.destroy(`products/${result.trademark.name}/${img.path}`,{
                 resource_type:"image"
             },(err)=>{
                 if(err) console.log(err);
@@ -159,3 +173,49 @@ exports.updateProduct = async (req,res,next)=>{
         });
     }
 };
+exports.uploadImages = async(req,res,next)=>{
+    try {
+        if (!req.files || Object.keys(req.files).length === 0) {
+            throw new Error('fail upload fail..!')
+        }
+        let images = req.files.images;
+        const _id = req.body.productId;
+        let product = await Product.findById(_id);
+        if(!product){
+            throw new Error("not found product...!");
+        }
+        let trademark = await Trademark.findById(product.trademarkId);
+        let tName = trademark.name.replace(' ', '-');
+        let _dirSave = `products/${tName}`;//path.join(__dirname, `../public/img/products/${tName}/`);
+        let d= new Date();
+        await images.map((image,index) => {
+        //check image is an image
+            if (fileFilter(image)) {
+                let imgName = `${tName}-${_id}-${d.getTime()+index}`;
+                cloudinary.uploader.upload(image.tempFilePath,{
+                    folder:_dirSave,
+                    public_id:imgName,
+                    unique_filename:true
+                },async (err)=>{
+                    if(err){console.log(err);}
+                    else{
+                       await ImageProduct.create(_id,imgName);
+                    }
+                })
+            }else {
+                console.log(`${image.name} is not an image...!`);
+            }
+        });
+        res.status(200).json({
+            message: "success...!",
+            code: 200,
+        });
+    } catch (e) {
+        console.log("Error: ", e.message);
+        res.status(500).json({
+            message:"upload files error...!",
+            code : 500,
+            error: e.message
+        });
+    }
+}
