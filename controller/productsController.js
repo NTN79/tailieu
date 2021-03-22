@@ -25,12 +25,11 @@ exports.getAll = async(req, res, next) => {
         const trademarks =[];
         let trademark = await Trademark.getAllTrademark();
         trademark.map(x=>{
-            trademarks.push(x.name);
+            trademarks[x.trademarkId]=x.name;
         })
-        console.log(trademarks);
         for(i=0;i<result.length;i++){
             result[i].images.map(x=>{
-                x.path= cloudinary.url(`products/${trademarks[result[i].trademarkId-1].replace(' ', '-')}/${x.path}`,{ format:'jpg'});
+                x.path= cloudinary.url(`products/${trademarks[result[i].trademarkId].replace(' ', '-')}/${x.path}`,{ format:'jpg'});
             });
         }
         res.status(200).json({
