@@ -65,7 +65,9 @@ exports.updateListCart = async (idCart,idUser,body)=>{
         }
         let data ={
             status:((body.status!=undefined&&Number.isInteger(body.status))?body.status:cart.status),
-            payment:((body.payment!=undefined&&Number.isInteger(body.payment))?body.payment:cart.payment)
+            payment:((body.payment!=undefined&&Number.isInteger(body.payment))?body.payment:cart.payment),
+            shipping:((body.shipping)?body.shipping:'FREE_SHIP'),
+            note:((body.note)?body.note:'')
         };
         const result = await ListCart.update(data,{
             where:{

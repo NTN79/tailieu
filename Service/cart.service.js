@@ -9,7 +9,8 @@ exports.createCart = async(body,CartId)=>{
             }, 
         })
         if(checkCart){
-            checkCart.quantity= checkCart.quantity+body.quantity;
+            let count = checkCart.quantity+body.quantity
+            checkCart.quantity= (count>=0)?count:1;
         }
         else{
             checkCart = DetailCart.build({

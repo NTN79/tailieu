@@ -1,5 +1,6 @@
 const ListCArt = require("../Service/listCart.service");
 const DetailCart = require("../Service/cart.service");
+const Product = require('../Service/product.service');
 
 exports.getAllCart = async (req,res,next)=>{
     try {
@@ -103,8 +104,8 @@ exports.createListCart =async (req,res,next)=>{
         }
         if(req.body.cartTemp){
             let cartTemp =req.body.cartTemp;
-            await cartTemp.map( x=>{     
-                DetailCart.createCart(x,cartReady.listCartId);
+            await cartTemp.map( async x=>{     
+               await DetailCart.createCart(x,cartReady.listCartId);
             });
         }
         res.status(201).json({

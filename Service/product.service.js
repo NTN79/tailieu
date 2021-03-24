@@ -5,7 +5,7 @@ const ImageProduct = require("./imageProduct.service");
 exports.getAllProduct = async()=>{
     try {
         let result = await Products.findAll({
-            include:["detail", "images"],
+            include:["detail", "images","trademark"],
             order:[['productId','DESC']],
         });
         if(!result){

@@ -29,7 +29,7 @@ exports.getAll = async(req, res, next) => {
         })
         for(i=0;i<result.length;i++){
             result[i].images.map(x=>{
-                x.path= cloudinary.url(`products/${trademarks[result[i].trademarkId].replace(' ', '-')}/${x.path}`,{ format:'jpg'});
+                x.path= cloudinary.url(`products/${trademarks[result[i].trademarkId].replace(' ', '-')}/${x.path}`,{ format:'jpg',width:1023,height:1023});
             });
         }
         res.status(200).json({
@@ -105,7 +105,7 @@ exports.getProductId = async (req, res, next) => {
             });
         }
         product.images.map(x=>{
-            x.path= cloudinary.url(`products/${product.trademark.name.replace(' ', '-')}/${x.path}`,{ format:'jpg'});
+            x.path= cloudinary.url(`products/${product.trademark.name.replace(' ', '-')}/${x.path}`,{ format:'jpg',width:1023,height:1023});
         });
         res.status(200).json({
             message: "get product successful...!",

@@ -13,6 +13,14 @@ module.exports = (sequelize,Sequelize)=>{
         payment:{
             type:Sequelize.INTEGER,
             allowNull:true
+        },
+        shipping:{
+            type:Sequelize.STRING(50),
+            allowNull:true
+        },
+        note:{
+            type:Sequelize.STRING(200),
+            allowNull:true
         }
     },{
         freezeTableName: true
