@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 22, 2021 at 12:43 PM
+-- Generation Time: Mar 24, 2021 at 07:07 PM
 -- Server version: 5.7.14
 -- PHP Version: 7.0.10
 
@@ -103,9 +103,8 @@ CREATE TABLE `detailcart` (
 --
 
 INSERT INTO `detailcart` (`id`, `productId`, `quantity`, `Price`, `createdAt`, `updatedAt`, `listCartId`) VALUES
-(7, 'NP1020-15A', 1, 8450000, '2021-03-19 16:49:01', '2021-03-19 16:49:01', 4),
-(10, 'NB2010-58A', 2, 18100000, '2021-03-19 17:54:31', '2021-03-19 17:54:31', 5),
-(11, 'NP1020-15A', 1, 8450000, '2021-03-19 17:54:31', '2021-03-19 17:54:31', 5);
+(1, 'NP1000-04E', 1, 18100000, '2021-03-24 18:02:11', '2021-03-24 18:02:11', 1),
+(2, 'DW00500002', 1, 5000000, '2021-03-24 18:05:57', '2021-03-24 18:05:57', 1);
 
 -- --------------------------------------------------------
 
@@ -361,7 +360,16 @@ INSERT INTO `imageproduct` (`id`, `path`, `productId`, `createdAt`, `updatedAt`)
 (162, 'DANIEL-WELLINGTON-DW00500002-1616344027028', 'DW00500002', '2021-03-21 16:27:08', '2021-03-21 16:27:08'),
 (163, 'DANIEL-WELLINGTON-DW00500002-1616344027030', 'DW00500002', '2021-03-21 16:27:09', '2021-03-21 16:27:09'),
 (164, 'DANIEL-WELLINGTON-DW00500002-1616344027031', 'DW00500002', '2021-03-21 16:27:09', '2021-03-21 16:27:09'),
-(165, 'DANIEL-WELLINGTON-DW00500002-1616344027029', 'DW00500002', '2021-03-21 16:27:09', '2021-03-21 16:27:09');
+(165, 'DANIEL-WELLINGTON-DW00500002-1616344027029', 'DW00500002', '2021-03-21 16:27:09', '2021-03-21 16:27:09'),
+(166, 'G-SHOCK-DW-6900-1616426536761', 'DW-6900', '2021-03-22 15:22:18', '2021-03-22 15:22:18'),
+(167, 'G-SHOCK-DW-6900-1616426536760', 'DW-6900', '2021-03-22 15:22:19', '2021-03-22 15:22:19'),
+(168, 'G-SHOCK-DW-6900-1616426536762', 'DW-6900', '2021-03-22 15:22:20', '2021-03-22 15:22:20'),
+(169, 'G-SHOCK-DW-6900-1616426536759', 'DW-6900', '2021-03-22 15:22:21', '2021-03-22 15:22:21'),
+(170, 'CASIO-MTP-1374L-7AVDF-1616426890506', 'MTP-1374L-7AVDF', '2021-03-22 15:28:12', '2021-03-22 15:28:12'),
+(171, 'CASIO-MTP-1374L-7AVDF-1616426890503', 'MTP-1374L-7AVDF', '2021-03-22 15:28:12', '2021-03-22 15:28:12'),
+(172, 'CASIO-MTP-1374L-7AVDF-1616426890505', 'MTP-1374L-7AVDF', '2021-03-22 15:28:14', '2021-03-22 15:28:14'),
+(173, 'CASIO-MTP-1374L-7AVDF-1616426890502', 'MTP-1374L-7AVDF', '2021-03-22 15:28:14', '2021-03-22 15:28:14'),
+(174, 'CASIO-MTP-1374L-7AVDF-1616426890504', 'MTP-1374L-7AVDF', '2021-03-22 15:28:15', '2021-03-22 15:28:15');
 
 -- --------------------------------------------------------
 
@@ -373,6 +381,8 @@ CREATE TABLE `listcart` (
   `listCartId` int(11) NOT NULL,
   `status` int(11) NOT NULL,
   `payment` int(11) DEFAULT NULL,
+  `shipping` varchar(50) DEFAULT NULL,
+  `note` varchar(200) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `userId` int(11) DEFAULT NULL
@@ -382,9 +392,8 @@ CREATE TABLE `listcart` (
 -- Dumping data for table `listcart`
 --
 
-INSERT INTO `listcart` (`listCartId`, `status`, `payment`, `createdAt`, `updatedAt`, `userId`) VALUES
-(4, 1, 1, '2021-03-19 15:32:39', '2021-03-19 17:46:18', 2),
-(5, 0, NULL, '2021-03-19 17:54:31', '2021-03-19 17:54:31', 2);
+INSERT INTO `listcart` (`listCartId`, `status`, `payment`, `shipping`, `note`, `createdAt`, `updatedAt`, `userId`) VALUES
+(1, 1, 0, 'FREE SHIP', 'duong 8, Thành phố Hồ Chí Minh, Quận Thủ Đức', '2021-03-24 18:02:11', '2021-03-24 19:03:50', 1);
 
 -- --------------------------------------------------------
 
@@ -532,7 +541,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`userId`, `fistName`, `lastName`, `birthday`, `phone`, `gender`, `province`, `district`, `address`, `email`, `password`, `roleId`, `avatar`, `createdAt`, `updatedAt`) VALUES
 (1, 'hoàng', 'kỳ', '1999-02-16 00:00:00', 223355667, 'Nam', 'Thành phố Hồ Chí Minh', 'Quận Thủ Đức', 'duong 8', 'test@gmail.com', '$2b$12$i.hGVJFaJsofOzVnnSdU6O9ipSuJOuEdN8Hc8CF6hqWVm1NJZex8e', 2, '1-223355667', '2021-03-15 12:34:12', '2021-03-19 07:46:41'),
-(2, 'Trong', 'Nghia', '1998-12-31 17:00:00', 1238888888, 'Nam', 'Thành phố Hồ Chí Minh\'', '', '', 'user@gmail.com', '$2b$12$.HDFR7eYYUVQz.n0sFy27OeXSs3zT4zwhabCuuMc/8j7hbaTwbYt6', 1, '2-1238888888', '2021-03-15 15:26:42', '2021-03-17 07:22:07');
+(2, 'Trong', 'Nghia', '1998-12-31 17:00:00', 1238888888, 'Nam', 'Thành phố Hồ Chí Minh\'', '', '', 'user@gmail.com', '$2b$12$.HDFR7eYYUVQz.n0sFy27OeXSs3zT4zwhabCuuMc/8j7hbaTwbYt6', 1, '2-1238888888', '2021-03-15 15:26:42', '2021-03-24 08:31:47');
 
 --
 -- Indexes for dumped tables
@@ -645,7 +654,7 @@ ALTER TABLE `detailbonus`
 -- AUTO_INCREMENT for table `detailcart`
 --
 ALTER TABLE `detailcart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `detailproduct`
 --
@@ -655,12 +664,12 @@ ALTER TABLE `detailproduct`
 -- AUTO_INCREMENT for table `imageproduct`
 --
 ALTER TABLE `imageproduct`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=175;
 --
 -- AUTO_INCREMENT for table `listcart`
 --
 ALTER TABLE `listcart`
-  MODIFY `listCartId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `listCartId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `roles`
 --
