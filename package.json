@@ -5,8 +5,7 @@
   "main": "app.js",
   "scripts": {
     "build":"cd client && npm run build",
-    "install-client":"cd client && npm install",
-    "heroku-postbuil": "npm run install-client && npm install --only=dev --no-shrinkwrap && npm run build",
+    "heroku-postbuil": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "start": "node app.js",
     "dev": "node -v  && nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
