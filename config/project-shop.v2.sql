@@ -98,13 +98,6 @@ CREATE TABLE `detailcart` (
   `listCartId` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `detailcart`
---
-
-INSERT INTO `detailcart` (`id`, `productId`, `quantity`, `Price`, `createdAt`, `updatedAt`, `listCartId`) VALUES
-(1, 'NP1000-04E', 1, 18100000, '2021-03-24 18:02:11', '2021-03-24 18:02:11', 1),
-(2, 'DW00500002', 1, 5000000, '2021-03-24 18:05:57', '2021-03-24 18:05:57', 1);
 
 -- --------------------------------------------------------
 
@@ -388,14 +381,6 @@ CREATE TABLE `listcart` (
   `userId` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `listcart`
---
-
-INSERT INTO `listcart` (`listCartId`, `status`, `payment`, `shipping`, `note`, `createdAt`, `updatedAt`, `userId`) VALUES
-(1, 1, 0, 'FREE SHIP', 'duong 8, Thành phố Hồ Chí Minh, Quận Thủ Đức', '2021-03-24 18:02:11', '2021-03-24 19:03:50', 1);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `products`
@@ -540,8 +525,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userId`, `fistName`, `lastName`, `birthday`, `phone`, `gender`, `province`, `district`, `address`, `email`, `password`, `roleId`, `avatar`, `createdAt`, `updatedAt`) VALUES
-(1, 'hoàng', 'kỳ', '1999-02-16 00:00:00', 223355667, 'Nam', 'Thành phố Hồ Chí Minh', 'Quận Thủ Đức', 'duong 8', 'test@gmail.com', '$2b$12$i.hGVJFaJsofOzVnnSdU6O9ipSuJOuEdN8Hc8CF6hqWVm1NJZex8e', 2, '1-223355667', '2021-03-15 12:34:12', '2021-03-19 07:46:41'),
-(2, 'Trong', 'Nghia', '1998-12-31 17:00:00', 1238888888, 'Nam', 'Thành phố Hồ Chí Minh\'', '', '', 'user@gmail.com', '$2b$12$.HDFR7eYYUVQz.n0sFy27OeXSs3zT4zwhabCuuMc/8j7hbaTwbYt6', 1, '2-1238888888', '2021-03-15 15:26:42', '2021-03-24 08:31:47');
+(1, 'hoàng', 'kỳ', '1999-02-16 00:00:00', 223355667, 'Nam', 'Thành phố Hồ Chí Minh', 'Quận Thủ Đức', 'duong 8', 'test@gmail.com', '$2b$12$i.hGVJFaJsofOzVnnSdU6O9ipSuJOuEdN8Hc8CF6hqWVm1NJZex8e', 2, '1-223355667', '2021-03-15 12:34:12', '2021-03-19 07:46:41');
 
 --
 -- Indexes for dumped tables
