@@ -63,7 +63,7 @@ app.use('/api/product',productRouter);
 app.use('/api/cart',cartRouter);
 
 
-app.use((req,res,next)=>{
+app.use('/api',(req,res,next)=>{
   const error = new Error("page not found...!");
   error.status = 404;
   next(error);
@@ -79,6 +79,9 @@ app.use((error,req,res,next)=>{
   });
 });
 
+if(process.env.NODE_ENV==='production'){
+  app.use(express.static('client/build'));
+}
 //app listen port
 const port = process.env.PORT|| 8080 ;
 app.listen(port,()=>{
