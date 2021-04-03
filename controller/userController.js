@@ -44,7 +44,7 @@ exports.getProfile = async (req, res, next) => {
             });
         }
         if(user.avatar){
-            user.avatar = cloundinary.url(`avatar/${user.avatar}`,{ format:'jpg'});
+            user.avatar = cloundinary.url(`avatar/${user.avatar}`,{ format:'jpg'}).replace('/v1/','/');
         }
         res.status(200).json({
             message: 'successful...!',

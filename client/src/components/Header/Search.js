@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartPlus, faCheckCircle, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios'
 import { CartContext } from '../../contexts/Cart';
+import {API_URL} from '../../config/apiConfig';
 
 export default function Search(props) {  
 
@@ -13,20 +14,20 @@ export default function Search(props) {
     const [toast, setToast] = useState(false)
 
     useEffect(()=> {
-        axios.get(`http://pe.heromc.net:4000/products`)
+        axios.get(`${API_URL}/api/product`)
             .then(res => {
-                setProducts(res.data)
-                setConstProducts(res.data)
+                // setProducts(res.data.data)
+                setConstProducts(res.data.data)
             }
         )
     }, [])
 
     const search = (event) => {
-        const value = event.target.value
+        var value = event.target.value
         setSearchInput(value)
         const search = []
         for (let i in constProducts) {
-            if ((constProducts[i].productName).toLowerCase().includes(searchInput)) {
+            if ((constProducts[i].name).toLowerCase().includes(searchInput)) {
                 search.push(constProducts[i])
             }
         }
@@ -37,9 +38,9 @@ export default function Search(props) {
 
     const cartClick = (event) => {
         const id = event.target.id
-        axios.get(`http://pe.heromc.net:4000/products/${id}`)
+        axios.get(`${API_URL}/api/product/${id}`)
             .then(res => {
-                addToCart(res.data)
+                addToCart(res.data.data);
             }
         )
         setToast(true)
@@ -52,10 +53,10 @@ export default function Search(props) {
         <div className={props.searchOpen === false ? 'Search displayNone' : 'Search'}>
             <div className={toast ? "toast toast-show" : "toast"} style={{top: '20px'}}>
                 <FontAwesomeIcon icon={faCheckCircle} className="icon"/>
-                Product is added to cart successfully
+                Sản phẩm được thêm vào giỏ hàng!
             </div>
             <div className="search-header flex">
-                <div className="search-title">Search</div>
+                <div className="search-title">Tìm kiếm</div>
                 <div
                     className="search-close"
                     onClick={props.clickToClose}
@@ -83,11 +84,11 @@ export default function Search(props) {
                         return (
                             <div className="cart-item flex" key={index}>
                                 <div className="cart-product-img">
-                                    <img src={item.productImg[0]} width="80px" height="100%" alt=""></img>
+                                    <img src={item.images[0].path} width="80px" height="100%" alt=""></img>
                                 </div>
                                 <div className="cart-product-mobile flex">
-                                    <div className="cart-product-name flex" style={{alignItems: 'center', justifyContent: 'flex-start'}}>{item.productName}</div>
-                                    <div className="cart-product-price wl-mb-price flex" style={{alignItems: 'center', justifyContent: 'flex-start'}}>{item.productFinalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ</div>
+                                    <div className="cart-product-name flex" style={{alignItems: 'center', justifyContent: 'flex-start'}}>{item.name}</div>
+                                    <div className="cart-product-price wl-mb-price flex" style={{alignItems: 'center', justifyContent: 'flex-start'}}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ</div>
                                     
                                     <div className="product-info-addtocart wl-mb-addtocart flex-center btn"
                                         onClick={(event)=> {
@@ -97,7 +98,7 @@ export default function Search(props) {
                                         id={item._id}
                                     >
                                         <FontAwesomeIcon style={{pointerEvents: 'none'}} icon={faCartPlus}/>
-                                        <p style={{pointerEvents: 'none'}}>Add to cart</p>
+                                        <p style={{pointerEvents: 'none'}}>Thêm vào giỏ</p>
                                     </div> 
                                 </div>
                             </div>

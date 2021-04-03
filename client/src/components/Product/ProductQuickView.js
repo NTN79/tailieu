@@ -6,8 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactStars from 'react-rating-stars-component';
 import { withRouter } from 'react-router-dom';
 import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { CartContext } from '../../contexts/Cart'; 
-
+ 
 function ProductQuickView(props) {
 
     const [countCart, setCountCart] = useState(1);

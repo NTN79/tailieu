@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../App.css";
-// import Newsletter from "../components/Layouts/Newsletter.js"
 import Footer from "../components/Layouts/Footer.js"
 import ProductBody from "../components/Product/ProductBody.js";
 import Header from "../components/Header/Header";

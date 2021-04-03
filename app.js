@@ -2,14 +2,16 @@ const express = require('express');
 const app = express();
 const bodyParser= require('body-parser');
 const morgan = require('morgan')
+const cors = require('cors');
+const dotenv = require('dotenv');
+dotenv.config();
+const path = require('path');
 const userRouter = require('./router/userRouter');
 const trademarkRouter = require('./router/trademarkRouter');
 const productRouter = require('./router/productRouter');
 const cartRouter = require("./router/ListCartRouter");
-const cors = require('cors');
-const dotenv = require('dotenv');
-const path = require('path');
-dotenv.config();
+const provinceRouter = require('./router/ProvinceRouter');
+
 
 //option upload file
 const fileUpload = require("express-fileupload");
@@ -62,7 +64,7 @@ app.use('/api/user',userRouter);
 app.use('/api/trademark',trademarkRouter);
 app.use('/api/product',productRouter);
 app.use('/api/cart',cartRouter);
-
+app.use('/api/vietnam',provinceRouter);
 
 app.use('/api',(req,res,next)=>{
   const error = new Error("page not found...!");

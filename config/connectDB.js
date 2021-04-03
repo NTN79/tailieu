@@ -30,6 +30,8 @@ databaseShop.detailBonus = require("../model/detailBonus")(sequelize,Sequelize);
 databaseShop.Comment = require("../model/commentModel")(sequelize,Sequelize);
 databaseShop.ListCart = require("../model/listCartModel")(sequelize,Sequelize);
 databaseShop.Blogs = require("../model/blogModel")(sequelize,Sequelize);
+databaseShop.Province = require("../model/ProvinceModel")(sequelize,Sequelize);
+databaseShop.District = require("../model/DistrictModel")(sequelize,Sequelize);
 
 const setRole= async()=>{
   databaseShop.ROLES=[];
@@ -41,6 +43,16 @@ const setRole= async()=>{
   });
 }
 setRole();
+//location VietNam
+databaseShop.District.belongsTo(databaseShop.Province,{
+  foreignKey:"idProvince",
+  otherKey:"id"
+})
+databaseShop.Province.hasMany(databaseShop.District,{
+  foreignKey:"idProvince",
+  as:"districts"
+})
+
 //relationship
 databaseShop.Users.belongsTo(databaseShop.Role,{
   foreignKey:"roleId",
