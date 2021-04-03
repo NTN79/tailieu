@@ -16,3 +16,13 @@ exports.create = async (body)=>{
         return null;
     }
 }
+exports.getAll = async()=>{
+    try {
+        let district = await District.findAll();
+        if(!district){throw new Error('not fond...')}
+        return district;
+    } catch (e) {
+        console.log(e.message);
+        return null;
+    }
+}

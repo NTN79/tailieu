@@ -16,23 +16,18 @@ export default function Search(props) {
     useEffect(()=> {
         axios.get(`${API_URL}/api/product`)
             .then(res => {
-                // setProducts(res.data.data)
                 setConstProducts(res.data.data)
             }
         )
     }, [])
 
-    const search = (event) => {
-        var value = event.target.value
-        setSearchInput(value)
-        const search = []
-        for (let i in constProducts) {
-            if ((constProducts[i].name).toLowerCase().includes(searchInput)) {
-                search.push(constProducts[i])
-            }
-        }
-        setProducts(search)
-    }
+    useEffect(()=>{
+        setProducts(
+            constProducts.filter(product=>{
+                return (product.name.toLowerCase().includes(searchInput.toLocaleLowerCase()))
+            })
+        )
+    },[searchInput,constProducts])
 
     const { removeFromWishList, addToCart } = useContext(CartContext)
 
@@ -73,7 +68,7 @@ export default function Search(props) {
                         <FontAwesomeIcon icon={faSearch} className="icon"/>
                         <input 
                             placeholder="Search" 
-                            onChange={search}
+                            onChange={e=>{setSearchInput(e.target.value)}}
                             value={searchInput}
                         />
                         <FontAwesomeIcon icon={faTimes} className="icon"/>

@@ -75,12 +75,12 @@ function AccountInfo(props) {
                   }
                }
             });
-         if (userInfo.userTinh !== "") {
-            axios.get(`http://pe.heromc.net:4000/vietnam`)
+         if (userInfo.province !== "") {
+            axios.get(`${API_URL}/api/vietnam`)
                .then(res => {
-                  setTinh(res.data[0].tinh)
-                  setHuyen(res.data[0].huyen)
-                  res.data[0].tinh.filter((item) => {
+                  setTinh(res.data.provinces)
+                  setHuyen(res.data.districts)
+                  res.data.provinces.filter((item) => {
                      if (userInfo.province === item.name) {
                         setProvinceId(item.id)
                      }
@@ -90,10 +90,10 @@ function AccountInfo(props) {
                )
             setUserTinh(userInfo.province)
          } else {
-            axios.get(`http://pe.heromc.net:4000/vietnam`)
+            axios.get(`${API_URL}/api/vietnam`)
                .then(res => {
-                  setTinh(res.data[0].tinh)
-                  setHuyen(res.data[0].huyen)
+                  setTinh(res.data.provinces)
+                  setHuyen(res.data.districts)
                }
                )
          }
@@ -427,7 +427,7 @@ function AccountInfo(props) {
                                  className="input"
                                  value={userTinh||""}
                                  onChange={(event) => {
-                                    setProvinceId(event.target.selectedIndex+1);
+                                    setProvinceId(event.target.selectedIndex);
                                     setUserTinh(event.target.value);
                                  }}
                               >
@@ -455,7 +455,7 @@ function AccountInfo(props) {
                               >
                                  <option defaultValue disabled>chọn huyện</option>
                                  {huyen.map((item, index) => {
-                                    if (item.tinh_id === provinceId) {
+                                    if (item.idProvince === provinceId) {
                                        return (
                                           <option
                                              key={index}
@@ -517,9 +517,7 @@ function AccountInfo(props) {
                                  </th> 
                               </tr>
                               {
-                                 
                                  orderList.reverse().map((item, index) => {
-                                    console.log(item);
                                     const date = new Date(item.createdAt)
                                     const day = date.getDate();
                                     const month = date.getMonth() + 1;

@@ -10,7 +10,7 @@ const userRouter = require('./router/userRouter');
 const trademarkRouter = require('./router/trademarkRouter');
 const productRouter = require('./router/productRouter');
 const cartRouter = require("./router/ListCartRouter");
-const provinceRouter = require('./router/ProvinceRouter');
+const vietnamRouter = require('./router/vietnamRouter');
 
 
 //option upload file
@@ -64,7 +64,7 @@ app.use('/api/user',userRouter);
 app.use('/api/trademark',trademarkRouter);
 app.use('/api/product',productRouter);
 app.use('/api/cart',cartRouter);
-app.use('/api/vietnam',provinceRouter);
+app.use('/api/vietnam',vietnamRouter);
 
 app.use('/api',(req,res,next)=>{
   const error = new Error("page not found...!");

@@ -17,9 +17,7 @@ exports.create = async (body)=>{
 }
 exports.getAll = async()=>{
     try {
-        let provinces = await Province.findAll({
-            include:["districts"]
-        });
+        let provinces = await Province.findAll();
         if(!provinces){throw new Error('not fond...')}
         return provinces;
     } catch (e) {

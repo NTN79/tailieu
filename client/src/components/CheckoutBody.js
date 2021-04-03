@@ -29,7 +29,6 @@ function CheckoutBody(props) {
     const [cartList, setCartList] = useState([])
     const subTotal = localStorage.getItem('total');
     const [shipping, setShipping] = useState(0)
-    const total = Number(subTotal) + Number(shipping)
     const [confirm, setConfirm] = useState(false)
     const [orderPaymentMethod, setOrderPaymentMethod] = useState("")
     const [orderAddressConfirm, setOrderAddressConfirm] = useState("")
@@ -43,14 +42,14 @@ function CheckoutBody(props) {
             setEmailInput(userInfo.email)
             setPhoneInput(userInfo.phone)
             setAddressInput(userInfo.address)
-            if (userInfo.userTinh !== "") {
-                axios.get(`http://pe.heromc.net:4000/vietnam`)
+            if (userInfo.province !== "") {
+                axios.get(`${API_URL}/api/vietnam`)
                     .then(res => {
-                        setTinh(res.data[0].tinh)
-                        setHuyen(res.data[0].huyen)
-                        res.data[0].tinh.filter((item)=>{ 
+                        setTinh(res.data.provinces)
+                        setHuyen(res.data.districts)
+                        res.data.provinces.filter((item) => {
                             if (userInfo.province === item.name) {
-                                setProvinceId(item.id)
+                               setProvinceId(item.id)
                             }
                             return null
                         })
@@ -58,10 +57,10 @@ function CheckoutBody(props) {
                 )  
                 setUserTinh(userInfo.province)
             } else {
-                axios.get(`http://pe.heromc.net:4000/vietnam`)
+                axios.get(`${API_URL}/api/vietnam`)
                     .then(res => {
-                        setTinh(res.data[0].tinh)
-                        setHuyen(res.data[0].huyen) 
+                        setTinh(res.data.provinces)
+                        setHuyen(res.data.districts)
                     }
                 )   
             }
@@ -275,7 +274,7 @@ function CheckoutBody(props) {
                                     >
                                         <option disabled defaultValue>select a district</option>
                                         {huyen.map((item, index) => {
-                                            if (item.tinh_id === provinceId) {
+                                            if (item.idProvince === provinceId) {
                                                 return (
                                                     <option
                                                         key={index}

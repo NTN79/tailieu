@@ -1,6 +1,7 @@
 const ProvinceService = require("../Service/province.service");
+const DistrictService = require("../Service/district.service");
 
-exports.create = async (req,res,next)=>{
+exports.createProvince = async (req,res,next)=>{
     try {
         let arr= req.body.data;
         await arr.map(async x=>{
@@ -8,10 +9,25 @@ exports.create = async (req,res,next)=>{
         })
         res.status(201).json({
             message:"success...!",
-            code: 201,
-            // data:data,
-            // itemLength:dataDetail.length,
-            // items:dataDetail
+            code: 201
+        });
+    } catch (e) {
+        console.log(e.message);
+        res.status(500).json({
+            code:500,
+            message:e.message
+        });
+    }
+}
+exports.createDistrict = async(req,res,next)=>{
+    try {
+        let arr= req.body.data;
+        await arr.map(async x=>{
+            await DistrictService.create(x);
+        })
+        res.status(201).json({
+            message:"success...!",
+            code: 201
         });
     } catch (e) {
         console.log(e.message);
@@ -23,8 +39,9 @@ exports.create = async (req,res,next)=>{
 }
 exports.getAll = async(req,res,next)=>{
     try {
-        let data = await ProvinceService.getAll();
-        if(!data){
+        let provinces = await ProvinceService.getAll();
+        let districts = await DistrictService.getAll();
+        if(!provinces || !districts){
             return res.status(404).json({
                 message:"not found data",
                 code:404
@@ -33,8 +50,10 @@ exports.getAll = async(req,res,next)=>{
         return res.status(200).json({
             message:"not found data",
             code:200,
-            length:data.length,
-            data:data
+            provinceLength:provinces.length,
+            provinces:provinces,
+            districtLength:districts.length,
+            districts:districts
         });
     } catch (e) {
         console.log(e.message);
