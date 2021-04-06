@@ -7,23 +7,7 @@ import ReactStars from 'react-rating-stars-component';
 import { CartContext } from '../../contexts/Cart';
 
 export default function ProductBody(props) {
-    // function slugify(str){
-    //         str = str.replace(/^\s+|\s+$/g, ''); // trim
-    //         str = str.toLowerCase();
-
-    //         // remove accents, swap ñ for n, etc
-    //         var from = "ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;";
-    //         var to   = "aaaaaeeeeeiiiiooooouuuunc------";
-    //         for (var i=0, l=from.length ; i<l ; i++) {
-    //             str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-    //         }
-
-    //         str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-    //             .replace(/\s+/g, '-') // collapse whitespace and replace by -
-    //             .replace(/-+/g, '-'); // collapse dashes
-
-    //         return str;    // Trim - from end of text
-    // }
+    
     const handleMouseMove = (e) => {
         const { left, top, width, height } = e.target.getBoundingClientRect();
         const x = ((e.pageX - left) / width) * 70;
@@ -85,9 +69,6 @@ export default function ProductBody(props) {
         }
     },[])
 
-    
-    let productDate = new Date()
-    // console.log(product); 
     let today = new Date()
     const ratingStar = {
         size: 12,
@@ -136,10 +117,8 @@ export default function ProductBody(props) {
             </div>
 
             <div className="product-detail flex">
-                <div className="product-gallery flex"
-                    // onMouseEnter={()=> {setHover(true)}}
-                    // onMouseLeave={()=> {setHover(false)}}
-                ><div 
+                <div className="product-gallery flex">
+                    <div 
                         className="product-small" ref={productSmall}
                     >
                         { product.images && product.images.map((item, index) => {
@@ -162,18 +141,13 @@ export default function ProductBody(props) {
                         ref={sliderWidth}
                         >
                         <div className="product-tag">
-                            {/* {
-                                product.productSale > 0 && <div className="product-tag-item sale">
-                                    {product.productSale}%
-                                </div>
-                            } */}
                             {
                                 product.amount <10 && <div className="product-tag-item hot">
                                     HOT
                                 </div>
                             }
                             {
-                                (today - productDate)/ (1000 * 3600 * 24) < 7 && <div className="product-tag-item new">
+                                (today - product.dayAdd)/ (1000 * 3600 * 24) < 7 && <div className="product-tag-item new">
                                     NEW 
                                 </div>
                             }
@@ -232,7 +206,6 @@ export default function ProductBody(props) {
                     </div>
                     <div 
                         className="product-info-vote"
-                        // onClick={props.scrollOnLick}
                         >
                         <ReactStars {...ratingStar} />
                         
@@ -275,7 +248,7 @@ export default function ProductBody(props) {
                         { loading !== 1 &&  
                             <div className="product-info-addtocart flex-center btn" onClick={cartClick} >
                                 <FontAwesomeIcon icon={faCartPlus}/>
-                                <p>Add to cart</p>
+                                <p>Thêm giỏ hàng</p>
                             </div>
                         }
                         { loading === 2 && 

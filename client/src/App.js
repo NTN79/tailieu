@@ -9,6 +9,7 @@ import Home from './pages/Home.js';
 import ProductDetail from './pages/ProductDetail';
 import Toast from './components/Toast';
 import Checkout from './pages/Checkout';
+import Shop from './pages/Shop.js'
 import { CartProvider } from './contexts/Cart'
 import { UserProvider } from './contexts/User';
 // import Dashboard from './components/admin/Dashboard/Dashboard';
@@ -25,7 +26,12 @@ function App() {
             <Route path="/home" exact component={Home}></Route>
             <Route path="/products/:id" exact component={ProductDetail}></Route>
             <Route path="/checkout" exact component={Checkout}></Route>  
-            
+            <Route path="/men" exact component={Shop}></Route>
+            <Route path="/women" exact component={Shop}></Route>
+            <Route path="/women/:cate" exact component={Shop}></Route>
+            <Route path="/men/:cate" exact component={Shop}></Route>
+            <Route path="/shop" exact component={Shop}></Route>
+            <Route path="/shop/:cate" exact component={Shop}></Route>
           </div>
           {/* <OpenChatBtn/> */}
         </Router>

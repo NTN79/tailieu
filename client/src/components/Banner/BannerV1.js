@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import '../../App.css';
 import {
     withRouter
@@ -10,17 +10,32 @@ import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 function BannerV4(props) {
 
     const location = props.history.location.pathname
-    const locationText = location.slice(1);
-
+    const locationText = location.split('/');
+    useEffect(()=>{
+        if(props.bannerImage){
+            document.querySelector('.BannerV4').style.backgroundImage = `url(${props.bannerImage})`;
+        }
+    },[])
     return(
         <div className="BannerV4">
             <div className="bannerv4-title">
-                {props.collectionTitle}
+                {locationText[locationText.length-1].toLocaleUpperCase().replace('-',' ')}
             </div> 
             <div className="newsbanner-breadcrumb flex-center">
                 <div>Trang Chủ</div>
-                <FontAwesomeIcon icon={faAngleRight} className="cart-icon" style={{margin: '0 10px'}}/>
-                <div style={{textTransform: 'capitalize'}}>{locationText}</div>
+                {
+                    locationText.length>0 &&
+                    locationText.map((item,i)=>{
+                        if(i>0){
+                            return(
+                                <div style={{textTransform: 'capitalize'}} key={item}>
+                                    <FontAwesomeIcon icon={faAngleRight} className="cart-icon" style={{margin: '0 10px'}}/>
+                                    {item.replace('-',' ')}
+                                </div>
+                            )   
+                        }
+                    })
+                }
             </div>
         </div>
     )

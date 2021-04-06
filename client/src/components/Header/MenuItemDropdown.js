@@ -26,7 +26,7 @@ function MenuItemDropdown(props) {
                 <Dropdown 
                     className="dropdown-display"
                     dropdownContent={props.dropdownContent}
-                    label={props.label}
+                    label={props.url}
                     scrolled={props.scrolled}
                     handleLeaveHover = {props.handleLeaveHover}
                 /> 

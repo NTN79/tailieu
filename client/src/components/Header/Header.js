@@ -53,7 +53,7 @@ function Header(props) {
         setDropdownHover(true)
     }
     const handleLeaveHover = () => {
-        setDropdownHover(false)
+        setDropdownHover(true)
     }
     const handleClick = () => {
 
@@ -84,8 +84,8 @@ function Header(props) {
             },
             {
                 id: "4",
-                label: "Thương hiệu",
-                url: "/trademark",
+                label: "Cửa Hàng",
+                url: "/shop",
                 dropdownContent: []
             },
             {
@@ -102,60 +102,33 @@ function Header(props) {
             },
         ]
         setNavBar(navBar)
-        axios.get(`${API_URL}/api/product`)
+        axios.get(`${API_URL}/api/trademark`)
             .then(res => {
                 let virtualNavBar = [...navBar]
-                const titleDrop = ["Thương hiệu","Khoảng Giá"]
+                const titleDrop = ["Thương hiệu"]
                 let titleDropdown = titleDrop.filter(function(elem, index, self) {
                     return index === self.indexOf(elem);
                 })
                
                 const menDropdownContent = []
-                for (let i in titleDropdown) {
-                    let menData = {}
-                    let cateList = []
-                    if(titleDropdown[i]==="Khoảng Giá"){
-                        cateList =["Giá Dưới 1 Triệu","Giá Dưới 3 Triệu","Giá trên 3 Triệu"]
-                    }
-                    else{
-                        for (let j in res.data.data) {
-                            if (titleDropdown[i]==="Thương hiệu" && res.data.data[j].gender === "Nam") {
-                                cateList.push(res.data.data[j].trademark.name)
-                            }
-                        }
-                    }
-                    let cateList2 = cateList.filter(function(elem, index, self) {
-                        return index === self.indexOf(elem);
-                    })
-                    // console.log(cateList)
-                    menData = {
-                        dropdownTitle: titleDropdown[i],
-                        dropdownList: cateList2
-                    }
-                    menDropdownContent.push(menData)
-                }
                 const womenDropdownContent = []
                 for (let i in titleDropdown) {
-                    let womenData = {}
+                    let Data = {}
                     let cateList = []
-                    if(titleDropdown[i]==="Khoảng Giá"){
-                        cateList =["Giá Dưới 1 Triệu","Giá Dưới 3 Triệu","Giá trên 3 Triệu"]
-                    }
-                    else{
-                        for (let j in res.data.data) {
-                            if (titleDropdown[i]==="Thương hiệu" && res.data.data[j].gender === "Nữ") {
-                                cateList.push(res.data.data[j].trademark.name)
-                            }
+                    for (let j in res.data.data) {
+                        if (titleDropdown[i]==="Thương hiệu") {
+                            cateList.push(res.data.data[j].name)
                         }
                     }
                     let cateList2 = cateList.filter(function(elem, index, self) {
                         return index === self.indexOf(elem);
                     })
-                    womenData = {
+                    Data = {
                         dropdownTitle: titleDropdown[i],
                         dropdownList: cateList2
                     }
-                    womenDropdownContent.push(womenData)
+                    menDropdownContent.push(Data)
+                    womenDropdownContent.push(Data)
                 }
                 for (let i in virtualNavBar) {
                     if (virtualNavBar[i].id === "3") {
@@ -169,9 +142,10 @@ function Header(props) {
             }
         )
         if (location === "/news" || location === `/product` ||
-            location === "/women" || location === `/man`) {
-            setWhiteText(true);
-            setDisableBox(true);
+            location === "/women" || location === `/men`) {
+            setWhiteText(false);
+            setWhiteBox(true);
+            setDisableBox(false);
         } else {
             setWhiteText(false);
             setDisableBox(false);
@@ -192,7 +166,7 @@ function Header(props) {
                     } else {
                         setWhiteBox(false)
                         setWhiteText(true)
-                        setDisableBox(true)
+                        setDisableBox(false)
                     }
                 } else if (this.prev < window.pageYOffset) { //down
                     if (dropdownHover === true) {

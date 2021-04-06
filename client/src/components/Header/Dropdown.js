@@ -1,28 +1,19 @@
 import React from 'react';
 import '../../App.css';
-import DropdownSlider from './DropdownSlider.js'
 import {
     withRouter
 } from 'react-router-dom'
-import womenImg from '../../assets/women-dropdown.jpg'
-import womenImg2 from '../../assets/women-dropdown2.jpg'
-import womenImg3 from '../../assets/women-dropdown3.jpg'
-import menImg from '../../assets/men-dropdown.jpg'
-import menImg2 from '../../assets/men-dropdown2.jpg'
-import menImg3 from '../../assets/men-dropdown3.jpg'
 
 function Dropdown(props) {
-
+    
+    const sex = props.label.toLowerCase()
     const redirect = (event) => {
         window.scrollTo(0,0);
-        props.history.push(`/${event.target.id}`)
+        props.history.push(`${event.target.id}`)
         props.handleLeaveHover()
     }
-
-    const sex = props.label.toLowerCase()
-
     return(
-        <div className="Dropdown" style={{display:'none'}}>
+        <div className="Dropdown" style={{display:'block'}}>
             <div className="dropdown-container ">
                 { props.dropdownContent.map((item, index) => {
                     return (
@@ -33,13 +24,12 @@ function Dropdown(props) {
                             <div>
                                 {item.dropdownTitle &&
                                     <div 
-                                        id = {`${sex}/${item.dropdownTitle.replace(/\s+/g, '')}`}
+                                        id = {`shop`}
                                         onClick={redirect}
                                         className="dropdown-title">{item.dropdownTitle}
                                     </div>
                                 }
-                                <div 
-                                    className="dropdown-item flex-col">
+                                <div className="dropdown-item flex-col">
                                     {
                                         item.dropdownList.map((item, index) => {
                                             return (
@@ -59,29 +49,6 @@ function Dropdown(props) {
                         </div>
                     )
                 })}
-                { props.label === 'Women' &&
-                    <DropdownSlider 
-                        width={"450"} 
-                        height={"300"}
-                        imgs={[
-                            womenImg,
-                            womenImg2,
-                            womenImg3,
-                        ]}
-                    ></DropdownSlider>
-                }
-                { props.label === 'Men' &&
-                    <DropdownSlider 
-                        id={props.id}
-                        width={"450"} 
-                        height={"300"}
-                        imgs={[
-                            menImg,
-                            menImg2,
-                            menImg3,
-                        ]}
-                    ></DropdownSlider>
-                }
             </div>
         </div>
     )

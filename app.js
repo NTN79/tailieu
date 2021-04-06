@@ -66,21 +66,21 @@ app.use('/api/product',productRouter);
 app.use('/api/cart',cartRouter);
 app.use('/api/vietnam',vietnamRouter);
 
-app.use('/api',(req,res,next)=>{
-  const error = new Error("page not found...!");
-  error.status = 404;
-  next(error);
-});
-app.use((error,req,res,next)=>{
-  console.log(error)
-  res.status(error.status||500);
-  res.json({
-    message:"ABCShop project shop...!",
-    member1:"Vo Hoang ky-DH51704991",
-    member2:"Nguyen Trong Nghia-DH5700968",
-    error: error.message
-  });
-});
+// app.use('*',(req,res,next)=>{
+//   const error = new Error("page not found...!");
+//   error.status = 404;
+//   next(error);
+// });
+// app.use((error,req,res,next)=>{
+//   console.log(error)
+//   res.status(error.status||500);
+//   res.send({
+//     message:"ABCShop project shop...!",
+//     member1:"Vo Hoang ky-DH51704991",
+//     member2:"Nguyen Trong Nghia-DH5700968",
+//     error: error.message
+//   });
+// });
 
 if(process.env.NODE_ENV==='production'){
   // Serve any static files

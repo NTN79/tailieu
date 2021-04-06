@@ -51,11 +51,6 @@ function Product(props) {
                 onMouseOut={()=> {setHover(false)}}
                 >
                 <div className="product-tag">
-                    {/* {
-                        product.productSale > 0 && <div className="product-tag-item sale">
-                            {product.productSale}%
-                        </div>
-                    } */}
                     {
                         product.amount < 10 && <div className="product-tag-item hot">
                             HOT
