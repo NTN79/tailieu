@@ -331,17 +331,6 @@ function ShopBody(props) {
                     { currentTab === 1 &&
                         <div className="shopbody-products">
                             {
-                                limitProduct.length === 0 &&
-                                <div style={{
-                                    textAlign: 'center',
-                                    width: '100%',
-                                    textTransform: 'capitalize',
-                                    marginTop: '150px'
-                                }}>
-                                    Không tìm thấy sản phẩm...!
-                                </div>
-                            }
-                            {
                                 product.length>0 &&
                                 limitProduct.map(function(item, index) {
                                     return (

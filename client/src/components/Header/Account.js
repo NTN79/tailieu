@@ -68,7 +68,6 @@ function Account(props) {
                 localStorage.setItem('user-id', res.data.data.userId);
             })
             .catch(err => {
-                console.log(err.response)
                 setArrErr(arrErr=>[...arrErr,((err.response.data!==undefined)?err.response.data.message:"lỗi đăng nhập...!")]);
             })
         } else {
@@ -104,9 +103,7 @@ function Account(props) {
                 setUserInfoFunc(res.data.data);
                 setLogin(true);
             })
-            .catch(err => {
-                console.log(err);
-            })
+            .catch(err => {})
         }
     },[]) 
     let uniqueErr, uniqueSuccess = [];
