@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import '../../App.css';
 import {
     withRouter
@@ -11,11 +11,6 @@ function BannerV4(props) {
 
     const location = props.history.location.pathname
     const locationText = location.split('/');
-    useEffect(()=>{
-        if(props.bannerImage){
-            document.querySelector('.BannerV4').style.backgroundImage = `url(${props.bannerImage})`;
-        }
-    },[])
     return(
         <div className="BannerV4">
             <div className="bannerv4-title">
@@ -26,14 +21,12 @@ function BannerV4(props) {
                 {
                     locationText.length>0 &&
                     locationText.map((item,i)=>{
-                        if(i>0){
-                            return(
-                                <div style={{textTransform: 'capitalize'}} key={item}>
-                                    <FontAwesomeIcon icon={faAngleRight} className="cart-icon" style={{margin: '0 10px'}}/>
-                                    {item.replace('-',' ')}
-                                </div>
-                            )   
-                        }
+                        return(
+                            i>0 && <div style={{textTransform: 'capitalize'}} key={item}>
+                                <FontAwesomeIcon icon={faAngleRight} className="cart-icon" style={{margin: '0 10px'}}/>
+                                {item.replace('-',' ')}
+                            </div>
+                        )   
                     })
                 }
             </div>

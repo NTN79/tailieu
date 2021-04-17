@@ -1,3 +1,4 @@
 node_modules/
 config/project-shop.sql
+config/project-shop.v2.sql
 .env

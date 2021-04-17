@@ -12,7 +12,9 @@ import Checkout from './pages/Checkout';
 import Shop from './pages/Shop.js'
 import { CartProvider } from './contexts/Cart'
 import { UserProvider } from './contexts/User';
-// import Dashboard from './components/admin/Dashboard/Dashboard';
+//admin page
+import Login from './components/admin/Login/Login';
+import Dashboard from './components/admin/Dashboard/Dashboard';
 
 function App() {
 
@@ -32,6 +34,8 @@ function App() {
             <Route path="/men/:cate" exact component={Shop}></Route>
             <Route path="/shop" exact component={Shop}></Route>
             <Route path="/shop/:cate" exact component={Shop}></Route>
+            <Route path="/admin" exact component={Login}></Route>
+            <Route path="/admin/dashboard" exact component={Dashboard}></Route>
           </div>
           {/* <OpenChatBtn/> */}
         </Router>

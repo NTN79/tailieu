@@ -16,9 +16,9 @@ export default function Footer() {
             <div className="footer-container">
                 <div className="footer-left">
                     <p className="cr">©2021 ABC Shop</p>
-                    <Link to="/news" onClick={handleClick}>News</Link>
-                    <a href="/contact" onClick={handleClick}>FAQs</a>
-                    <Link to="/contact" onClick={handleClick}>Contact us</Link>
+                    <Link to="/" onClick={handleClick}>Trang Chủ</Link>
+                    <a href="/shop" onClick={handleClick}>Cửa Hàng</a>
+                    <Link to="/contact" onClick={handleClick}>Về Chúng Tôi</Link>
                 </div>
                 <div className="footer-right">
                     <FontAwesomeIcon icon={faTwitter} className="cart-icon-footer"/>

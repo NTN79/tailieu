@@ -5,7 +5,7 @@
 }
 .login-bg {
     width: 100%;
-    position: relative;
+    /* position: relative; */
     bottom: 600px;
 }
 .login-overlay {

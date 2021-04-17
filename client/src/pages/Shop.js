@@ -14,12 +14,9 @@ function Shop(props) {
     let sex = props.location.pathname.split('/')[1]
     let cate = props.location.pathname.split('/')[2] 
 
-    useEffect(()=>{
+    useEffect(() => {
         window.scrollTo(0,0);
         document.body.style.overflow = 'unset';
-    },[])
-
-    useEffect(() => {
         if (sex === "shop") { 
             axios.get(`${API_URL}/api/product`)
             .then(res => {   

@@ -11,7 +11,8 @@ const trademarkRouter = require('./router/trademarkRouter');
 const productRouter = require('./router/productRouter');
 const cartRouter = require("./router/ListCartRouter");
 const vietnamRouter = require('./router/vietnamRouter');
-
+const commentRouter = require('./router/commentRouter');
+const blogRouter = require('./router/blogRouter');
 
 //option upload file
 const fileUpload = require("express-fileupload");
@@ -65,6 +66,8 @@ app.use('/api/trademark',trademarkRouter);
 app.use('/api/product',productRouter);
 app.use('/api/cart',cartRouter);
 app.use('/api/vietnam',vietnamRouter);
+app.use('/api/comment',commentRouter);
+app.use('/api/blog',blogRouter);
 
 // app.use('*',(req,res,next)=>{
 //   const error = new Error("page not found...!");

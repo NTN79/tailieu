@@ -1,17 +1,20 @@
-const {ROLES,role} = require('../config/connectDB');
+const {ROLES} = require('../config/connectDB');
 const User = require('../Service/user.service');
 
 exports.isAdminShop= async (req,res,next)=>{
     try {
         let userRole =  await User.getRole(req.user.userId);
         let role = ROLES[userRole-1].replace('Role_','').toLocaleUpperCase();
+        console.log(ROLES);
         if(role==="ADMIN"){
+            req.role=role;
             next();
             return;
         }
         res.status(403).json({
             message:'login authorization manager fail...!',
-            code :403
+            code :403,
+            roleConnect:"USER"
         });
     } catch (e) {
         res.status(500).json({

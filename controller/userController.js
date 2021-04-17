@@ -49,7 +49,8 @@ exports.getProfile = async (req, res, next) => {
         res.status(200).json({
             message: 'successful...!',
             code: 200,
-            data: user
+            data: user,
+            roleConnect:(req.role)?req.role:'user'
         });
     } catch (e) {
         res.status(500).json({

@@ -18,8 +18,6 @@ function CheckoutBody(props) {
     } = useContext(UserContext);
     const { cartId } = useContext(CartContext)
     const [nameInput, setNameInput] = useState("")
-    const [_id, set_Id] = useState("")
-    const [userAvt, setUserAvt] = useState("")
     const [emailInput, setEmailInput] = useState("")
     const [phoneInput, setPhoneInput] = useState("")
     const [provinceId, setProvinceId] = useState("")
@@ -36,8 +34,6 @@ function CheckoutBody(props) {
 
     useEffect(()=>{
         if (userInfo) {
-            setUserAvt(userInfo.avatar)
-            set_Id(userInfo.userId)
             setNameInput(`${userInfo.fistName} ${userInfo.lastName}`)
             setEmailInput(userInfo.email)
             setPhoneInput(userInfo.phone)
